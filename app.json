@@ -18,13 +18,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.atlascii.project_pinnacle"
+      "supportsTablet": true
+      
+
     },
 
     "android": {
-
-      "package": "com.atlascii.project_pinnacle",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
