@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+
+    "scheme":"com.atlascii.project_pinnacle" ,
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -19,7 +22,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.havenfire.ProjectPinnacle"
+      "bundleIdentifier": "com.havenfire.project_pinnacle"
     },
     "android": {
       "package": "com.atlascii.project_pinnacle",
@@ -36,5 +39,7 @@
         "projectId": "40a3f7c9-5d2a-4110-a51d-4d6f6c7f0a08"
       }
     }
+
+    
   }
 }
