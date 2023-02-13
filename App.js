@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Button, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import DefaultMap from './src/components/defaultMap';
 
 const TakePhoto = () => {
   const [photo, setPhoto] = useState(null);
@@ -25,6 +26,7 @@ const TakePhoto = () => {
       {photo && <Image source={{ uri: photo }} style={{ width: 200, height: 200 }} />}
       <Button title="Take Photo" onPress={takePhoto} />
     </View>
+    <DefaultMap/>
   );
 };
 
