@@ -19,13 +19,9 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.atlascii.project_pinnacle"
-
-
+      "bundleIdentifier": "com.havenfire.ProjectPinnacle"
     },
-
     "android": {
-
       "package": "com.atlascii.project_pinnacle",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -34,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "40a3f7c9-5d2a-4110-a51d-4d6f6c7f0a08"
+      }
     }
   }
 }

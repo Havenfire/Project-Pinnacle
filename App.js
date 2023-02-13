@@ -20,6 +20,7 @@ export default function App() {
   });
 
   React.useEffect(() => {
+
     if(response?.type === "success"){
       setAccessToken(response.authentication.accessToken);
       accessToken && fetchUserInfo();
@@ -61,7 +62,7 @@ export default function App() {
             promptAsync();
             }} 
         >
-          <Image source={require("./projectpinnacle.png")} style={{width: 300, height: 40}} />
+          <Image source={require("./btn.png")} style={{width: 300, height: 40}} />
         </TouchableOpacity>
         </>
       }
