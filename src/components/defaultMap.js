@@ -32,7 +32,7 @@ export default class DefaultMap extends Component {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ locationResult: JSON.stringify(location), location, });
+        this.setState({ locationResult: JSON.stringify(location), location });
     };
 
     render() {
