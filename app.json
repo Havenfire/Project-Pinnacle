@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
 
-    "scheme":"com.atlascii.project_pinnacle" ,
+    "scheme": "somename" ,
 
     "splash": {
       "image": "./assets/splash.png",
@@ -22,10 +22,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.havenfire.project_pinnacle"
+      "bundleIdentifier": "com.havenfire.Project-Pinnacle"
     },
     "android": {
-      "package": "com.atlascii.project_pinnacle",
+      "package": "com.havenfire.Project-Pinnacle",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
