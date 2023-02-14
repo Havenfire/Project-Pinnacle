@@ -1,9 +1,7 @@
 import * as React from 'react';
-import DefaultMap from './src/components/defaultMap';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native';
 
 //web: 268143036566-tlvqs00cmhj991u6ih4rimec8qcspus8.apps.googleusercontent.com
 //ios: 268143036566-ds66ps82mm60r001s4s7mfcin4vtbj6g.apps.googleusercontent.com
