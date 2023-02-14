@@ -23,13 +23,22 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.havenfire.Project-Pinnacle"
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app requires camera access to take photos."
+      }
+
     },
     "android": {
       "package": "com.havenfire.Project-Pinnacle",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
