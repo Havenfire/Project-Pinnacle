@@ -40,13 +40,15 @@ export default function App() {
 
 
   const ShowUserInfo = () => {
-
+    console.log(user)
     if(user) {
       return(
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{fontSize: 35, fontWeight: 'bold', marginBottom: 20}}>Welcome</Text>
           <Image source={{uri: user.picture}} style={{width: 100, height: 100, borderRadius: 50}} />
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>{user.name}</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>{user.email}</Text>
+
         </View>
       )
     }
