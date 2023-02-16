@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-
 //web: 268143036566-tlvqs00cmhj991u6ih4rimec8qcspus8.apps.googleusercontent.com
 //ios: 268143036566-ds66ps82mm60r001s4s7mfcin4vtbj6g.apps.googleusercontent.com
 //android: 268143036566-t085g15qe1qbm35fo6m3ct2j9iggjd07.apps.googleusercontent.com
@@ -22,7 +21,6 @@ export default function GoogleAuth() {
 
     React.useEffect(() => {
         if (response?.type === "success") {
-
             setAccessToken(response.authentication.accessToken);
             accessToken && fetchUserInfo();
         }
@@ -37,8 +35,6 @@ export default function GoogleAuth() {
         setUser(useInfo);
     }
 
-
-
     const ShowUserInfo = () => {
         console.log(user)
         if (user) {
@@ -48,7 +44,6 @@ export default function GoogleAuth() {
                     <Image source={{ uri: user.picture }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{user.name}</Text>
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{user.email}</Text>
-
                 </View>
             )
         }
@@ -67,7 +62,7 @@ export default function GoogleAuth() {
                             promptAsync();
                         }}
                     >
-                        <Image source={require("./btn.png")} style={{ width: 300, height: 40 }} />
+                    <Image source={require("../assets/googleAuthButton.png")} style={{ width: 300, height: 40 }} />
                     </TouchableOpacity>
                 </>
             }
