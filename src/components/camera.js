@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Button, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 
 export default class Camera extends Component {
 
@@ -13,7 +12,7 @@ export default class Camera extends Component {
     }
     
     takePhoto = async () => {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status === 'granted') {
             const result = await ImagePicker.launchCameraAsync({
                 allowsEditing: true,
@@ -21,12 +20,14 @@ export default class Camera extends Component {
             });
 
             if (!result.canceled) {
-                this.setState({
-                    photo: result.uri
-                });
+                this.state.photo = result.uri;
             }
         }
     };
+
+    getPhoto() {
+        return this.state.photo ? this.state.photo : null;
+    }
 
     render() {
         return (
