@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Button, StatusBar } from "react-native";
+import { Text, View, StyleSheet, StatusBar } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
 import Dialog from "react-native-dialog";
+import Camera from "./camera";
+import { Svg, Image as ImageSvg } from 'react-native-svg';
 
 export default class DefaultMap extends Component {
     constructor(props) {
@@ -75,6 +77,10 @@ export default class DefaultMap extends Component {
     };
 
     onPressAddPin = async () => {
+        let camera = new Camera();
+        await camera.takePhoto();
+        console.log(JSON.stringify(camera.getPhoto()));
+        let photo = camera.getPhoto();
         this.onPressDismissDialog();
         if (this.state.tempTitle && this.state.tempDescription) {
             if (this.state.tempCoordinate) {
@@ -82,7 +88,7 @@ export default class DefaultMap extends Component {
                     this.state.tempCoordinate,
                     this.state.tempTitle,
                     this.state.tempDescription,
-                    null
+                    photo ? photo : null
                 );
             } else {
                 await this._getLocationAsync();
@@ -90,7 +96,7 @@ export default class DefaultMap extends Component {
                     this.state.location.coords,
                     this.state.tempTitle,
                     this.state.tempDescription,
-                    null
+                    photo ? photo : null
                 );
             }
         }
@@ -132,17 +138,33 @@ export default class DefaultMap extends Component {
                     onMarkerPress={() => this.setState({ showDialog: false })}>
                     {this.state.pins
                         ? this.state.pins.map((pin) => (
-                              <Marker
-                                  coordinate={pin.coordinate}
-                                  title={pin.title}
-                                  description={pin.description}
-                                  image={pin.image}
-                              />
-                          ))
+                            <Marker
+                                coordinate={pin.coordinate}
+                                title={pin.title}
+                                description={pin.description}
+                            >
+                                <Callout>
+                                    <Text>
+                                        {pin.title}
+                                    </Text>
+                                    <Text>
+                                        {pin.description}
+                                    </Text>
+                                    <Svg width={240} height={180}>
+                                        <ImageSvg
+                                            width={'100%'}
+                                            height={'100%'}
+                                            preserveAspectRatio="xMidYMid slice"
+                                            href={{ uri: (pin.image ? pin.image : null) }}
+                                        />
+                                    </Svg>
+                                </Callout>
+                            </Marker>
+                        ))
                         : null}
-                    <Text style={styles.text}>
+                    {/* <Text style={styles.text}>
                         List of Pins on Map: {JSON.stringify(this.state.pins)}
-                    </Text>
+                    </Text> */}
                     {/* <Button
                         onPress={this.onPressShowDialog}
                         title={"Add a Pin at current location"}

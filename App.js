@@ -7,7 +7,7 @@ export default function App() {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <DefaultMap />
-            <Camera />
+            {/* <Camera /> */}
         </View>
     );
 }
