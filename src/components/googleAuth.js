@@ -8,7 +8,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function GoogleAuth() {
+export default function GoogleAuth({ navigation }) {
     const [accessToken, setAccessToken] = React.useState(null);
     const [user, setUser] = React.useState(null);
 
@@ -36,12 +36,21 @@ export default function GoogleAuth() {
     }
 
     const ShowUserInfo = () => {
-        console.log(user)
         if (user) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 35, fontWeight: 'bold', marginBottom: 20 }}>Welcome</Text>
-                    <Image source={{ uri: user.picture }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+
+                    <TouchableOpacity
+                        disabled={!request}
+                        onPress={() => {
+                            navigation.navigate('Profile')
+                        }}
+                    >
+                        <Image source={{ uri: user.picture }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                    </TouchableOpacity>
+
+
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{user.name}</Text>
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{user.email}</Text>
                 </View>
@@ -50,7 +59,12 @@ export default function GoogleAuth() {
     }
 
     return (
+
+
         <View style={styles.container}>
+
+
+
             {user && <ShowUserInfo />}
             {user === null &&
                 <>
@@ -62,7 +76,7 @@ export default function GoogleAuth() {
                             promptAsync();
                         }}
                     >
-                    <Image source={require("../assets/googleAuthButton.png")} style={{ width: 300, height: 40 }} />
+                        <Image source={require("../assets/googleAuthButton.png")} style={{ width: 300, height: 40 }} />
                     </TouchableOpacity>
                 </>
             }
