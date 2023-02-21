@@ -36,7 +36,6 @@ export default function GoogleAuth() {
     }
 
     const ShowUserInfo = () => {
-        console.log(user)
         if (user) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
