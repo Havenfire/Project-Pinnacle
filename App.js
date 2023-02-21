@@ -28,12 +28,17 @@ export default function App() {
             <Stack.Screen
               name="GoogleAuth"
               component={GoogleAuth}
-              options={{ title: '' }}
             />
+            
+
             <Stack.Screen
               name="Profile"
               component={Profile}
-              options={{ title: 'Profile' }}
+            />
+
+            <Stack.Screen
+              name="DefaultMap"
+              component={DefaultMap}
             />
           </Stack.Navigator>
         </NavigationContainer>

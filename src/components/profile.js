@@ -1,13 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
-export default class Profile extends React.Component {
+
+export default class Profile extends React.Component  {
 
     constructor(props) {
         super(props);
         this.state = {
-            full_name: null,
+            full_name: "Filler",
             first_name: null,
             last_name: null,
             username: null,
@@ -22,13 +23,21 @@ export default class Profile extends React.Component {
             <SafeAreaView style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.titleBar}>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('DefaultMap')
+                        }}
+                    >
                         <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
-                        <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+
+
                     </View>
 
                     <View style={{ alignSelf: "center" }}>
                         <View style={styles.profileImage}>
-                            <Image source={require("../assets/profile_profile-pic.jpg")} style={styles.image} resizeMode="center"></Image>
+                            <Image source={require("../assets/profile_filler.jpg")} style={styles.image} resizeMode="center"></Image>
                         </View>
                         <View style={styles.active}></View>
                         <View style={styles.add}>
@@ -37,12 +46,12 @@ export default class Profile extends React.Component {
                     </View>
 
                     <View style={styles.infoContainer}>
-                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{this.props.full_name}</Text>
+                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Heisenberg</Text>
                     </View>
 
                     <View style={styles.statsContainer}>
                         <View style={styles.statsBox}>
-                            <Text style={[styles.text, { fontSize: 24 }]}>0</Text>
+                            <Text style={[styles.text, { fontSize: 24 }]}>1</Text>
                             <Text style={[styles.text, styles.subText]}>Pins</Text>
                         </View>
                         <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
