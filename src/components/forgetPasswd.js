@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, SafeAreaView, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
 import * as Font from 'expo-font';
 import { LinearGradient } from "expo-linear-gradient";
-import TextFieldSVG from '../assets/svg/sign-in/sign-in-shade.svg';
-import SignInBtnSVG from '../assets/svg/sign-in/sign-in-button.svg';
-import SignUpBtnSVG from '../assets/svg/sign-in/create-account-button.svg';
-import SignInGoogleSVG from '../assets/svg/sign-in/sign-in-google.svg';
+import TextFieldSVG from '../assets/svg/forget-passwd/forget-passwd-shade.svg';
+import ForgetPasswdBtn from '../assets/svg/forget-passwd/forget-passwd-button.svg';
+import BackBtnSVG from '../assets/svg/common/back-button.svg'
 
-export default class SignInPage extends Component {
+export default class ForgetPasswdPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,73 +49,47 @@ export default class SignInPage extends Component {
             return (
                 <View style={styles.container}>
                     <LinearGradient
-                        colors={['#5DB45B', '#B7BA44']}
+                        colors={['#B7BA44', '#FBBC05']}
                         style={styles.container}
                         start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
+                        end={{ x: 0, y: 1 }}
                     >
                         <SafeAreaView>
-                            {/* Title */}
-                            <Text style={styles.title}>Welcome!</Text>
+                            {/* Back Button */}
+                            <TouchableOpacity
+                                style={styles.backBtnContainer}
+                                onPress={() => this.props.navigation.goBack()}
+                            >
+                                <BackBtnSVG />
+                            </TouchableOpacity>
 
-                            {/* Username Input */}
+                            {/* Title */}
+                            <Text style={styles.title}>Reset Password</Text>
+
+                            {/* Blank Space */}
+                            <View style={styles.textFieldContainer}>
+                            </View>
+
+                            {/* Email Input */}
                             <View style={styles.textFieldContainer}>
                                 <TextFieldSVG />
                                 <TextInput
                                     style={styles.textFieldInput}
                                     returnKeyType="next"
-                                    placeholder="Username / Email"
+                                    type="email"
+                                    inputMode="email"
+                                    keyboardType="email-address"
+                                    placeholder="Email"
                                 />
                             </View>
 
-                            {/* Password Input */}
-                            <View style={styles.textFieldContainer}>
-                                <TextFieldSVG />
-                                <TextInput
-                                    style={styles.textFieldInput}
-                                    type="password"
-                                    returnKeyType="done"
-                                    secureTextEntry={true}
-                                    placeholder="Password"
-                                />
-                            </View>
-
-                            {/* Sign In Button */}
+                            {/* Sign Up Button */}
                             <TouchableOpacity
                                 style={styles.textFieldContainer}
-                                onPress={() => { this.props.navigation.navigate('DefaultMap') }}
+                                onPress={() => this.props.navigation.navigate('SignIn')}
                             >
-                                <SignInBtnSVG />
-                                <Text style={styles.signInBtnText}>SIGN IN</Text>
-                            </TouchableOpacity>
-
-                            {/* OR Text */}
-                            <View style={styles.textContainer}>
-                                <Text style={styles.textOR}>OR</Text>
-                            </View>
-
-                            {/* Create Account Button */}
-                            <TouchableOpacity
-                                style={styles.textFieldContainer}
-                                onPress={() => { this.props.navigation.navigate('SignUp') }}
-                            >
-                                <SignUpBtnSVG />
-                                <Text style={styles.signInBtnText}>CREATE ACCOUNT</Text>
-                            </TouchableOpacity>
-
-                            {/* Forget Password Text */}
-                            <View style={styles.textContainer}>
-                                <Pressable onPress={() => { this.props.navigation.navigate('ForgetPasswd') }}>
-                                    <Text style={styles.textForget}>Forgot Password?</Text>
-                                </Pressable>
-                            </View>
-
-                            {/* Sign In With Google */}
-                            <TouchableOpacity
-                                style={styles.googleIconContainer}
-                                onPress={() => { this.props.navigation.navigate('GoogleAuth') }}
-                            >
-                                <SignInGoogleSVG />
+                                <ForgetPasswdBtn />
+                                <Text style={styles.signUpBtnText}>RESET</Text>
                             </TouchableOpacity>
                         </SafeAreaView>
                     </LinearGradient>
@@ -127,10 +100,10 @@ export default class SignInPage extends Component {
             // Default loading screen
             <View style={styles.container} >
                 <LinearGradient
-                    colors={['#5DB45B', '#B7BA44']}
+                    colors={['#B7BA44', '#FBBC05']}
                     style={styles.container}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
+                    end={{ x: 0, y: 1 }}
                 />
             </View >
         );
@@ -139,6 +112,14 @@ export default class SignInPage extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    backBtnContainer: {
+        position: 'absolute',
+        marginLeft: 28,
+        marginTop: "15%",
+        width: 25,
+        height: 25,
         flex: 1,
     },
     title: {
@@ -156,12 +137,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flex: 1,
     },
-    textContainer: {
-        marginTop: "-8%",
-        marginBottom: "17%",
-        alignSelf: 'center',
-        flex: 1,
-    },
     textFieldInput: {
         position: 'absolute',
         fontSize: 18,
@@ -172,32 +147,11 @@ const styles = StyleSheet.create({
         color: '#241C1C',
         opacity: 0.7
     },
-    signInBtnText: {
+    signUpBtnText: {
         position: 'absolute',
         fontSize: 24,
         fontFamily: 'Montserrat-ExtraBold',
         alignSelf: 'center',
         color: '#F5F4F2',
-    },
-    textOR: {
-        position: 'absolute',
-        fontSize: 16,
-        fontFamily: 'Montserrat-Light',
-        alignSelf: 'center',
-        color: '#F5F4F2',
-    },
-    textForget: {
-        position: 'absolute',
-        fontSize: 16,
-        fontFamily: 'Montserrat-LightItalic',
-        alignSelf: 'right',
-        color: '#2C847F',
-    },
-    googleIconContainer: {
-        marginTop: "10%",
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        flex: 1,
     }
 });

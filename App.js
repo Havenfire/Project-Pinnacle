@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import DefaultMap from "./src/components/defaultMap";
-import Camera from "./src/components/camera";
-import Profile from "./src/components/profile";
-import { View } from "react-native";
-import GoogleAuth from "./src/components/googleAuth";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./src/components/signIn";
+import SignUpPage from "./src/components/signUp";
+import DefaultMap from "./src/components/defaultMap";
+import Profile from "./src/components/profile";
+import GoogleAuth from "./src/components/googleAuth";
+import ForgetPasswdPage from "./src/components/forgetPasswd";
 
 export default function App() {
     const username = "JohnDoe";
@@ -25,6 +25,8 @@ export default function App() {
                     headerShown: false,
                 }}>
                 <Stack.Screen name="SignIn" component={SignInPage} />
+                <Stack.Screen name="SignUp" component={SignUpPage} />
+                <Stack.Screen name="ForgetPasswd" component={ForgetPasswdPage} />
                 <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
                 <Stack.Screen name="Profile" component={Profile} />
                 <Stack.Screen name="DefaultMap" component={DefaultMap} />
