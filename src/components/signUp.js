@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, SafeAreaView, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
 import * as Font from 'expo-font';
 import { LinearGradient } from "expo-linear-gradient";
-import TextFieldSVG from '../assets/svg/sign-in/sign-in-shade.svg';
-import SignInBtnSVG from '../assets/svg/sign-in/sign-in-button.svg';
-import SignUpBtnSVG from '../assets/svg/sign-in/create-account-button.svg';
-import SignInGoogleSVG from '../assets/svg/sign-in/sign-in-google.svg';
+import TextFieldSVG from '../assets/svg/sign-up/sign-up-shade.svg';
+import SignUpBtnSVG from '../assets/svg/sign-up/sign-up-button.svg';
+import BackBtnSVG from '../assets/svg/common/back-button.svg'
 
-export default class SignInPage extends Component {
+export default class SignUpPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,14 +49,22 @@ export default class SignInPage extends Component {
             return (
                 <View style={styles.container}>
                     <LinearGradient
-                        colors={['#5DB45B', '#B7BA44']}
+                        colors={['#2C847F', '#7BA95E']}
                         style={styles.container}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
+                        start={{ x: 1, y: 0 }}
+                        end={{ x: 0, y: 1 }}
                     >
                         <SafeAreaView>
+                            {/* Back Button */}
+                            <TouchableOpacity
+                                style={styles.backBtnContainer}
+                                onPress={() => this.props.navigation.goBack()}
+                            >
+                                <BackBtnSVG />
+                            </TouchableOpacity>
+
                             {/* Title */}
-                            <Text style={styles.title}>Welcome!</Text>
+                            <Text style={styles.title}>Sign Up</Text>
 
                             {/* Username Input */}
                             <View style={styles.textFieldContainer}>
@@ -65,7 +72,20 @@ export default class SignInPage extends Component {
                                 <TextInput
                                     style={styles.textFieldInput}
                                     returnKeyType="next"
-                                    placeholder="Username / Email"
+                                    placeholder="Username"
+                                />
+                            </View>
+
+                            {/* Email Input */}
+                            <View style={styles.textFieldContainer}>
+                                <TextFieldSVG />
+                                <TextInput
+                                    style={styles.textFieldInput}
+                                    returnKeyType="next"
+                                    type="email"
+                                    inputMode="email"
+                                    keyboardType="email-address"
+                                    placeholder="Email"
                                 />
                             </View>
 
@@ -74,49 +94,32 @@ export default class SignInPage extends Component {
                                 <TextFieldSVG />
                                 <TextInput
                                     style={styles.textFieldInput}
-                                    type="password"
-                                    returnKeyType="done"
+                                    returnKeyType="next"
+                                    type="new-password"
                                     secureTextEntry={true}
                                     placeholder="Password"
                                 />
                             </View>
 
-                            {/* Sign In Button */}
-                            <TouchableOpacity
-                                style={styles.textFieldContainer}
-                                onPress={() => { this.props.navigation.navigate('DefaultMap') }}
-                            >
-                                <SignInBtnSVG />
-                                <Text style={styles.signInBtnText}>SIGN IN</Text>
-                            </TouchableOpacity>
-
-                            {/* OR Text */}
-                            <View style={styles.textContainer}>
-                                <Text style={styles.textOR}>OR</Text>
+                            {/* Confirm Password Input */}
+                            <View style={styles.textFieldContainer}>
+                                <TextFieldSVG />
+                                <TextInput
+                                    style={styles.textFieldInput}
+                                    returnKeyType="done"
+                                    type="password"
+                                    secureTextEntry={true}
+                                    placeholder="Confirm Password"
+                                />
                             </View>
 
-                            {/* Create Account Button */}
+                            {/* Sign Up Button */}
                             <TouchableOpacity
                                 style={styles.textFieldContainer}
-                                onPress={() => { this.props.navigation.navigate('SignUp') }}
+                                onPress={() => this.props.navigation.navigate('SignIn')}
                             >
                                 <SignUpBtnSVG />
-                                <Text style={styles.signInBtnText}>CREATE ACCOUNT</Text>
-                            </TouchableOpacity>
-
-                            {/* Forget Password Text */}
-                            <View style={styles.textContainer}>
-                                <Pressable onPress={() => { this.props.navigation.navigate('ForgetPasswd') }}>
-                                    <Text style={styles.textForget}>Forgot Password?</Text>
-                                </Pressable>
-                            </View>
-
-                            {/* Sign In With Google */}
-                            <TouchableOpacity
-                                style={styles.googleIconContainer}
-                                onPress={() => { this.props.navigation.navigate('GoogleAuth') }}
-                            >
-                                <SignInGoogleSVG />
+                                <Text style={styles.signUpBtnText}>SIGN UP</Text>
                             </TouchableOpacity>
                         </SafeAreaView>
                     </LinearGradient>
@@ -127,10 +130,10 @@ export default class SignInPage extends Component {
             // Default loading screen
             <View style={styles.container} >
                 <LinearGradient
-                    colors={['#5DB45B', '#B7BA44']}
+                    colors={['#2C847F', '#7BA95E']}
                     style={styles.container}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
+                    start={{ x: 1, y: 0 }}
+                    end={{ x: 0, y: 1 }}
                 />
             </View >
         );
@@ -139,6 +142,14 @@ export default class SignInPage extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    backBtnContainer: {
+        position: 'absolute',
+        marginLeft: 28,
+        marginTop: "15%",
+        width: 25,
+        height: 25,
         flex: 1,
     },
     title: {
@@ -156,12 +167,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flex: 1,
     },
-    textContainer: {
-        marginTop: "-8%",
-        marginBottom: "17%",
-        alignSelf: 'center',
-        flex: 1,
-    },
     textFieldInput: {
         position: 'absolute',
         fontSize: 18,
@@ -172,32 +177,11 @@ const styles = StyleSheet.create({
         color: '#241C1C',
         opacity: 0.7
     },
-    signInBtnText: {
+    signUpBtnText: {
         position: 'absolute',
         fontSize: 24,
         fontFamily: 'Montserrat-ExtraBold',
         alignSelf: 'center',
         color: '#F5F4F2',
-    },
-    textOR: {
-        position: 'absolute',
-        fontSize: 16,
-        fontFamily: 'Montserrat-Light',
-        alignSelf: 'center',
-        color: '#F5F4F2',
-    },
-    textForget: {
-        position: 'absolute',
-        fontSize: 16,
-        fontFamily: 'Montserrat-LightItalic',
-        alignSelf: 'right',
-        color: '#2C847F',
-    },
-    googleIconContainer: {
-        marginTop: "10%",
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        flex: 1,
     }
 });
