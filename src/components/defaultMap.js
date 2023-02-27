@@ -64,15 +64,19 @@ export default class DefaultMap extends Component {
 
     _getLocationAsync = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-            this.setState({
-                locationResult: "Permission to access location was denied",
-                location,
-            });
+        try {
+            if (status !== "granted") {
+                this.setState({
+                    locationResult: "Permission to access location was denied",
+                    location,
+                });
+            }
+    
+            let location = await Location.getCurrentPositionAsync({});
+            this.setState({ locationResult: JSON.stringify(location), location });   
+        } catch (error) {
+            console.log(error);
         }
-
-        let location = await Location.getCurrentPositionAsync({});
-        this.setState({ locationResult: JSON.stringify(location), location });
         // this.addPin(
         //     this.state.location.coords,
         //     "I am here",
@@ -129,7 +133,7 @@ export default class DefaultMap extends Component {
             this.state.location.coords,
             this.state.tempTitle,
             this.state.tempDescription,
-            photo ? photo : null
+            this.state.photo ?  this.state.photo : null
         );
         console.log("Past addPin");
 
