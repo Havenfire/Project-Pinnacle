@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from 'react-native-svg';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import mapStyle from '../themes/mapStyle.json';
+import mapStyleDark from '../themes/mapStyleDark.json';
 
 
 export default class DefaultMap extends Component {
@@ -34,6 +35,7 @@ export default class DefaultMap extends Component {
             tempDescription: null,
             tempCoordinate: null,
             photo: null,
+            theme: mapStyle,
         };
     }
     addPin(coordinate, title, description, image) {
@@ -78,7 +80,7 @@ export default class DefaultMap extends Component {
         //     null
         // );
     };
-    
+
     onPressAddPin = async () => {
         let camera = new Camera();
         await camera.takePhoto();
@@ -154,8 +156,6 @@ export default class DefaultMap extends Component {
     };
 
 
-
-
     onPressShowDialog = () => {
         this.setState({ showDialog: true });
     };
@@ -172,6 +172,9 @@ export default class DefaultMap extends Component {
 
                 <MapView
                     style={styles.map}
+                    provider={PROVIDER_GOOGLE}
+                    customMapStyle={this.state.theme}
+                    
                     region={{
                         latitude: this.state.location.coords.latitude,
                         longitude: this.state.location.coords.longitude,
@@ -181,12 +184,7 @@ export default class DefaultMap extends Component {
                             this.state.location.coords.accuracy * 0.0005,
                     }}
                     onRegionChange={this._handleMapRegionChange}
-                    onPress={(e) =>
-                        this.setState({
-                            showDialog: true,
-                            tempCoordinate: e.nativeEvent.coordinate,
-                        })
-                    }
+
                     onMarkerPress={() => this.setState({ showDialog: false })}>
                     {this.state.pins
                         ? this.state.pins.map((pin) => (
@@ -241,11 +239,16 @@ export default class DefaultMap extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.navigate('DefaultMap')
 
+                            if(this.state.theme === mapStyle){
+                                this.setState({ theme: mapStyleDark });
+                            } 
+                            else {
+                                this.setState({ theme: mapStyle });
+                            }
                         }}
                     >
-                        <Ionicons name="location" size={48} color="#52575D"></Ionicons>
+                        <Ionicons name="sunny" size={48} color="#52575D"></Ionicons>
                     </TouchableOpacity>
                 </View>
 
