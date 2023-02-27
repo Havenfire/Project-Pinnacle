@@ -64,79 +64,26 @@ export default class DefaultMap extends Component {
 
     _getLocationAsync = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        try {
-            if (status !== "granted") {
-                this.setState({
-                    locationResult: "Permission to access location was denied",
-                    location,
-                });
-            }
-    
-            let location = await Location.getCurrentPositionAsync({});
-            this.setState({ locationResult: JSON.stringify(location), location });   
-        } catch (error) {
-            console.log(error);
+        if (status !== "granted") {
+            this.setState({
+                locationResult: "Permission to access location was denied",
+                location,
+            });
         }
-        // this.addPin(
-        //     this.state.location.coords,
-        //     "I am here",
-        //     "This is my current location",
-        //     null
-        // );
-    };
 
-    onPressAddPin = async () => {
-        let camera = new Camera();
-        await camera.takePhoto();
-        console.log(JSON.stringify(camera.getPhoto()));
-        let photo = camera.getPhoto();
-        this.onPressDismissDialog();
-        if (this.state.tempTitle && this.state.tempDescription) {
-            if (this.state.tempCoordinate) {
-                this.addPin(
-                    this.state.tempCoordinate,
-                    this.state.tempTitle,
-                    this.state.tempDescription,
-                    photo ? photo : null
-                );
-            } else {
-                await this._getLocationAsync();
-                this.addPin(
-                    this.state.location.coords,
-                    this.state.tempTitle,
-                    this.state.tempDescription,
-                    photo ? photo : null
-                );
-            }
-        }
-        this.setState({
-            tempTitle: null,
-            tempDescription: null,
-            tempCoordinate: null,
-        });
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ locationResult: JSON.stringify(location), location });
     };
 
     localGetPinInfo = async () => {
         this._getLocationAsync();
         let camera = new Camera();
         await camera.takePhoto();
-        console.log(JSON.stringify(camera.getPhoto()));
-        this.state.photo = camera.getPhoto();
+        this.setState({ photo: camera.state.photo });
+
         if (this.state.photo) {
             this.setState({ showDialog: true });
         }
-
-        console.log(this.state.tempTitle);
-        console.log(this.state.description);
-
-        this.addPin(
-            this.state.location.coords,
-            this.state.tempTitle,
-            this.state.tempDescription,
-            this.state.photo ?  this.state.photo : null
-        );
-        console.log("Past addPin");
-
     };
 
     handleDialogueInputs = (title, description) => {
@@ -216,13 +163,6 @@ export default class DefaultMap extends Component {
                             </Marker>
                         ))
                         : null}
-                    {/* <Text style={styles.text}>
-                        List of Pins on Map: {JSON.stringify(this.state.pins)}
-                    </Text> */}
-                    {/* <Button
-                        onPress={this.onPressShowDialog}
-                        title={"Add a Pin at current location"}
-                    /> */}
 
                 </MapView>
 
@@ -233,8 +173,7 @@ export default class DefaultMap extends Component {
                             this.props.navigation.navigate('DefaultMap')
                         }}
                     >
-                        <Ionicons name="search-sharp" size={48} color="#52575D"></Ionicons>
-                        {/* <Text> Search </Text> */}
+                        <Ionicons name="search-sharp" size={36} color="#52575D"></Ionicons>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -243,8 +182,7 @@ export default class DefaultMap extends Component {
 
                         }}
                     >
-                        <Ionicons name="menu-sharp" size={48} color="#52575D"></Ionicons>
-                        {/* <Text> Menu </Text> */}
+                        <Ionicons name="menu-sharp" size={36} color="#52575D"></Ionicons>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.navBar}>
@@ -253,7 +191,7 @@ export default class DefaultMap extends Component {
                             this.props.navigation.navigate('Profile')
                         }}
                     >
-                        <Ionicons name="heart" size={48} color="#52575D"></Ionicons>
+                        <Ionicons name="heart" size={36} color="#52575D"></Ionicons>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -261,7 +199,7 @@ export default class DefaultMap extends Component {
                             this.localGetPinInfo()
                         }}
                     >
-                        <Ionicons name="add-circle" size={48} color="#52575D"></Ionicons>
+                        <Ionicons name="add-circle" size={36} color="#52575D"></Ionicons>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -274,7 +212,7 @@ export default class DefaultMap extends Component {
                             }
                         }}
                     >
-                        <Ionicons name="sunny" size={48} color="#52575D"></Ionicons>
+                        <Ionicons name="sunny" size={36} color="#52575D"></Ionicons>
                     </TouchableOpacity>
                 </View>
 
