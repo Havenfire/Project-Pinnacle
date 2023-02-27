@@ -118,12 +118,12 @@ export default class DefaultMap extends Component {
         await camera.takePhoto();
         console.log(JSON.stringify(camera.getPhoto()));
         this.state.photo = camera.getPhoto();
-        this.setState({ showDialog: true });
+        if (this.state.photo) {
+            this.setState({ showDialog: true });
+        }
 
         console.log(this.state.tempTitle);
         console.log(this.state.description);
-
-        
 
         this.addPin(
             this.state.location.coords,
@@ -174,7 +174,7 @@ export default class DefaultMap extends Component {
                     style={styles.map}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
-                    
+
                     region={{
                         latitude: this.state.location.coords.latitude,
                         longitude: this.state.location.coords.longitude,
@@ -219,8 +219,30 @@ export default class DefaultMap extends Component {
                         onPress={this.onPressShowDialog}
                         title={"Add a Pin at current location"}
                     /> */}
+
                 </MapView>
 
+
+                <View style={styles.titleBar}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('DefaultMap')
+                        }}
+                    >
+                        <Ionicons name="search-sharp" size={48} color="#52575D"></Ionicons>
+                        {/* <Text> Search </Text> */}
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('DefaultMap')
+
+                        }}
+                    >
+                        <Ionicons name="menu-sharp" size={48} color="#52575D"></Ionicons>
+                        {/* <Text> Menu </Text> */}
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.navBar}>
                     <TouchableOpacity
                         onPress={() => {
@@ -240,9 +262,9 @@ export default class DefaultMap extends Component {
                     <TouchableOpacity
                         onPress={() => {
 
-                            if(this.state.theme === mapStyle){
+                            if (this.state.theme === mapStyle) {
                                 this.setState({ theme: mapStyleDark });
-                            } 
+                            }
                             else {
                                 this.setState({ theme: mapStyle });
                             }
@@ -251,29 +273,6 @@ export default class DefaultMap extends Component {
                         <Ionicons name="sunny" size={48} color="#52575D"></Ionicons>
                     </TouchableOpacity>
                 </View>
-
-
-
-                <View style={styles.titleBar}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate('DefaultMap')
-                        }}
-                    >
-                        <Ionicons name="search-sharp" size={48} color="#52575D"></Ionicons>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate('DefaultMap')
-
-                        }}
-                    >
-                        <Ionicons name="menu-sharp" size={48} color="#52575D"></Ionicons>
-                    </TouchableOpacity>
-                </View>
-
-
 
                 <Dialog.Container visible={this.state.showDialog}>
                     <Dialog.Title>Create a Pin</Dialog.Title>
@@ -302,6 +301,7 @@ export default class DefaultMap extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1
     },
     text: {
         margin: 40,
@@ -315,29 +315,27 @@ const styles = StyleSheet.create({
         height: "100%",
     },
 
+    titleBar: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        alignSelf: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingHorizontal: "5%",
+        paddingVertical: "5%",
+    },
+
     navBar: {
         position: "absolute",
         bottom: 0,
         left: 0,
         right: 0,
         flexDirection: "row",
-        alignItems: "center",
         justifyContent: "space-between",
-        paddingHorizontal: 24,
-        paddingVertical: 24,
+        paddingHorizontal: "5%",
+        paddingVertical: "5%",
     },
-
-    titleBar: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingHorizontal: 24,
-        paddingVertical: 24,
-    },
-
 
 });
