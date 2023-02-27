@@ -12,22 +12,18 @@ export default class Camera extends Component {
     }
     
     takePhoto = async () => {
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status === 'granted') {
-            const result = await ImagePicker.launchCameraAsync({
-                allowsEditing: true,
-                aspect: [4, 3],
-            });
-
-            if (!result.canceled) {
-                this.state.photo = result.uri;
-            }
-        }
+            const { status } = await ImagePicker.requestCameraPermissionsAsync();
+            if (status === 'granted') {
+                    const result = await ImagePicker.launchCameraAsync({
+                        allowsEditing: true,
+                        aspect: [4, 3],
+                    });
+                    if (!result.canceled) {
+                        //throws warning, DO NOT TOUCH
+                        this.state.photo = result.uri;
+                    }   
+            }   
     };
-
-    getPhoto() {
-        return this.state.photo ? this.state.photo : null;
-    }
 
     render() {
         return (

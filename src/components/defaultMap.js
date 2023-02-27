@@ -1,10 +1,14 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, StatusBar } from "react-native";
+import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from 'react-native-svg';
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import mapStyle from '../themes/mapStyle.json';
+import mapStyleDark from '../themes/mapStyleDark.json';
+
 
 export default class DefaultMap extends Component {
     constructor(props) {
@@ -30,9 +34,10 @@ export default class DefaultMap extends Component {
             tempTitle: null,
             tempDescription: null,
             tempCoordinate: null,
+            photo: null,
+            theme: mapStyle,
         };
     }
-
     addPin(coordinate, title, description, image) {
         if (coordinate && title && description) {
             this.state.pins = this.state.pins.concat({
@@ -68,44 +73,39 @@ export default class DefaultMap extends Component {
 
         let location = await Location.getCurrentPositionAsync({});
         this.setState({ locationResult: JSON.stringify(location), location });
-        // this.addPin(
-        //     this.state.location.coords,
-        //     "I am here",
-        //     "This is my current location",
-        //     null
-        // );
     };
 
-    onPressAddPin = async () => {
+    localGetPinInfo = async () => {
+        this._getLocationAsync();
         let camera = new Camera();
         await camera.takePhoto();
-        console.log(JSON.stringify(camera.getPhoto()));
-        let photo = camera.getPhoto();
-        this.onPressDismissDialog();
-        if (this.state.tempTitle && this.state.tempDescription) {
-            if (this.state.tempCoordinate) {
-                this.addPin(
-                    this.state.tempCoordinate,
-                    this.state.tempTitle,
-                    this.state.tempDescription,
-                    photo ? photo : null
-                );
-            } else {
-                await this._getLocationAsync();
-                this.addPin(
-                    this.state.location.coords,
-                    this.state.tempTitle,
-                    this.state.tempDescription,
-                    photo ? photo : null
-                );
-            }
+        this.setState({ photo: camera.state.photo });
+
+        if (this.state.photo) {
+            this.setState({ showDialog: true });
         }
+    };
+
+    handleDialogueInputs = (title, description) => {
+        this.setState({ tempTitle: title });
+        this.setState({ tempTitle: description });
+        this.setState({ showDialog: false });
+        this.addPin(
+            this.state.location.coords,
+            this.state.tempTitle,
+            this.state.tempDescription,
+            this.state.photo,
+        );
+
         this.setState({
             tempTitle: null,
             tempDescription: null,
             tempCoordinate: null,
+            photo: null
+
         });
     };
+
 
     onPressShowDialog = () => {
         this.setState({ showDialog: true });
@@ -117,9 +117,15 @@ export default class DefaultMap extends Component {
 
     render() {
         return (
+
+
             <View style={styles.container}>
+
                 <MapView
                     style={styles.map}
+                    provider={PROVIDER_GOOGLE}
+                    customMapStyle={this.state.theme}
+
                     region={{
                         latitude: this.state.location.coords.latitude,
                         longitude: this.state.location.coords.longitude,
@@ -129,12 +135,7 @@ export default class DefaultMap extends Component {
                             this.state.location.coords.accuracy * 0.0005,
                     }}
                     onRegionChange={this._handleMapRegionChange}
-                    onPress={(e) =>
-                        this.setState({
-                            showDialog: true,
-                            tempCoordinate: e.nativeEvent.coordinate,
-                        })
-                    }
+
                     onMarkerPress={() => this.setState({ showDialog: false })}>
                     {this.state.pins
                         ? this.state.pins.map((pin) => (
@@ -162,14 +163,59 @@ export default class DefaultMap extends Component {
                             </Marker>
                         ))
                         : null}
-                    {/* <Text style={styles.text}>
-                        List of Pins on Map: {JSON.stringify(this.state.pins)}
-                    </Text> */}
-                    {/* <Button
-                        onPress={this.onPressShowDialog}
-                        title={"Add a Pin at current location"}
-                    /> */}
+
                 </MapView>
+
+
+                <View style={styles.titleBar}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('DefaultMap')
+                        }}
+                    >
+                        <Ionicons name="search-sharp" size={36} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('DefaultMap')
+
+                        }}
+                    >
+                        <Ionicons name="menu-sharp" size={36} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.navBar}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('Profile')
+                        }}
+                    >
+                        <Ionicons name="heart" size={36} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.localGetPinInfo()
+                        }}
+                    >
+                        <Ionicons name="add-circle" size={36} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+
+                            if (this.state.theme === mapStyle) {
+                                this.setState({ theme: mapStyleDark });
+                            }
+                            else {
+                                this.setState({ theme: mapStyle });
+                            }
+                        }}
+                    >
+                        <Ionicons name="sunny" size={36} color="#52575D"></Ionicons>
+                    </TouchableOpacity>
+                </View>
+
                 <Dialog.Container visible={this.state.showDialog}>
                     <Dialog.Title>Create a Pin</Dialog.Title>
                     <Dialog.Input
@@ -188,7 +234,7 @@ export default class DefaultMap extends Component {
                         label="Cancel"
                         onPress={this.onPressDismissDialog}
                     />
-                    <Dialog.Button label="OK" onPress={this.onPressAddPin} />
+                    <Dialog.Button label="OK" onPress={this.handleDialogueInputs} />
                 </Dialog.Container>
             </View>
         );
@@ -197,11 +243,7 @@ export default class DefaultMap extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#ffffff",
+        flex: 1
     },
     text: {
         margin: 40,
@@ -214,4 +256,28 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
+
+    titleBar: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        alignSelf: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingHorizontal: "5%",
+        paddingVertical: "5%",
+    },
+
+    navBar: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingHorizontal: "5%",
+        paddingVertical: "5%",
+    },
+
 });
