@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontSize: 18,
         fontFamily: 'Montserrat-Medium',
-        alignSelf: 'left',
+        textAlign: 'left',
         width: 279,
         marginLeft: 20,
         color: '#241C1C',

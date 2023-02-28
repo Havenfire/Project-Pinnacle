@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontSize: 18,
         fontFamily: 'Montserrat-Medium',
-        alignSelf: 'left',
+        textAlign: 'left',
         width: 279,
         marginLeft: 20,
         color: '#241C1C',
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontSize: 16,
         fontFamily: 'Montserrat-LightItalic',
-        alignSelf: 'right',
+        textAlign: 'right',
         color: '#2C847F',
     },
     googleIconContainer: {
