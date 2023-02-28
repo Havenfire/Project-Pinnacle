@@ -115,6 +115,14 @@ export default class DefaultMap extends Component {
         this.setState({ showDialog: false });
     };
 
+    getButtonColor = () => {
+        if (this.state.theme == mapStyle) {
+            return "#241C1CCC";
+        } else {
+            return "#F5F4F2CC";
+        }
+    };
+
     render() {
         return (
 
@@ -125,6 +133,7 @@ export default class DefaultMap extends Component {
                     style={styles.map}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
+                    mapPadding={{ left: 0, right: 0, top: 0, bottom: 24 }}
 
                     region={{
                         latitude: this.state.location.coords.latitude,
@@ -173,7 +182,7 @@ export default class DefaultMap extends Component {
                             this.props.navigation.navigate('DefaultMap')
                         }}
                     >
-                        <Ionicons name="search-sharp" size={36} color="#52575D"></Ionicons>
+                        <Ionicons name="search" size={36} color={this.getButtonColor()} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -182,25 +191,11 @@ export default class DefaultMap extends Component {
 
                         }}
                     >
-                        <Ionicons name="menu-sharp" size={36} color="#52575D"></Ionicons>
+                        <Ionicons name="menu" size={36} color={this.getButtonColor()} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.navBar}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate('Profile')
-                        }}
-                    >
-                        <Ionicons name="heart" size={36} color="#52575D"></Ionicons>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.localGetPinInfo()
-                        }}
-                    >
-                        <Ionicons name="add-circle" size={36} color="#52575D"></Ionicons>
-                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
 
@@ -212,8 +207,25 @@ export default class DefaultMap extends Component {
                             }
                         }}
                     >
-                        <Ionicons name="sunny" size={36} color="#52575D"></Ionicons>
+                        <Ionicons name={this.state.theme === mapStyle ? "sunny" : "moon"} size={36} color={this.getButtonColor()} reflect-horizontal={false} />
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.localGetPinInfo()
+                        }}
+                    >
+                        <Ionicons name="add-circle" size={36} color={this.getButtonColor()} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('Profile')
+                        }}
+                    >
+                        <Ionicons name="heart" size={36} color={this.getButtonColor()} />
+                    </TouchableOpacity>
+
                 </View>
 
                 <Dialog.Container visible={this.state.showDialog}>
