@@ -20,7 +20,7 @@ export default class Camera extends Component {
                     });
                     if (!result.canceled) {
                         //throws warning, DO NOT TOUCH
-                        this.state.photo = result.uri;
+                        this.state.photo = result.assets[0].uri;
                     }   
             }   
     };
