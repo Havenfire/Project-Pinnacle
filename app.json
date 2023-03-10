@@ -6,6 +6,7 @@
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "light",
+        "privacy": "public",
         "plugins": ["expo-image-picker"],
         "splash": {
             "image": "./assets/splash.png",
@@ -33,7 +34,8 @@
                 "CAMERA",
                 "READ_EXTERNAL_STORAGE",
                 "WRITE_EXTERNAL_STORAGE"
-            ]
+            ],
+            "package": "com.pinnacle.project"
         },
         "web": {
             "favicon": "./assets/favicon.png"
