@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application android:usesCleartextTraffic="true" tools:targetApi="28" tools:ignore="GoogleAppIndexingWarning">
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCEZyuCBNkf1Jmi7nG0NuU4EmbjA-AoOjI"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDOO-KGmmcRD66I6LmG3Gu8vqbBRX4UcsU"/>
     </application>
 
 </manifest>
