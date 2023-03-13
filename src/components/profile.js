@@ -1,10 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import default_profile_pic from "../assets/profile_filler.jpg";
 
 export default function Profile ({route, navigation}){
 
     const { user_profile } = route.params;
+    if(typeof user_profile === 'undefined'){
+        console.log("sup");
+    }
+
+
     console.log(user_profile);
     return (
         <SafeAreaView style={styles.container}>
@@ -19,12 +25,11 @@ export default function Profile ({route, navigation}){
                         <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
                     </TouchableOpacity>
 
-
                 </View>
 
                 <View style={{ alignSelf: "center" }}>
                     <View style={styles.profileImage}>
-                        <Image source={{uri: user_profile.picture,}} style={styles.image} resizeMode="cover"></Image>
+                        <Image source={{uri: user_profile.picture,}} style={styles.image} ></Image>
                     </View>
                     <View style={styles.active}></View>
                     <View style={styles.add}>
@@ -98,7 +103,9 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 200,
         height: 200,
-        overflow: "hidden"
+        overflow: "hidden",
+        borderRadius: 100,
+
     },
     dm: {
         backgroundColor: "#41444B",

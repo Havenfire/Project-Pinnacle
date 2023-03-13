@@ -220,7 +220,7 @@ export default class DefaultMap extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.navigate('Profile')
+                            this.props.navigation.navigate('DefaultMap')
                         }}
                     >
                         <Ionicons name="heart" size={36} color={this.getButtonColor()} />
