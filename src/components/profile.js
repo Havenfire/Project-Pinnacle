@@ -2,85 +2,72 @@ import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
+export default function Profile ({route, navigation}){
 
-export default class Profile extends React.Component  {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            full_name: "Filler",
-            first_name: null,
-            last_name: null,
-            username: null,
-            email: null,
-            profile_pic: null,
-        };
-    }
-
-
-    render() {
-        return (
-            <SafeAreaView style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.titleBar}>
+    const { user_profile } = route.params;
+    console.log(user_profile);
+    return (
+        <SafeAreaView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.titleBar}>
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.navigate('DefaultMap')
+                            navigation.navigate('DefaultMap')
                         }}
                     >
                         <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
                     </TouchableOpacity>
 
 
+                </View>
+
+                <View style={{ alignSelf: "center" }}>
+                    <View style={styles.profileImage}>
+                        <Image source={{uri: user_profile.picture,}} style={styles.image} resizeMode="cover"></Image>
+                    </View>
+                    <View style={styles.active}></View>
+                    <View style={styles.add}>
+                        <Ionicons name="ios-add" size={48} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
+                    </View>
+                </View>
+
+                <View style={styles.infoContainer}>
+                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{user_profile.name}</Text>
+                </View>
+
+                <View style={styles.statsContainer}>
+                    <View style={styles.statsBox}>
+                        <Text style={[styles.text, { fontSize: 24 }]}>1</Text>
+                        <Text style={[styles.text, styles.subText]}>Pins</Text>
+                    </View>
+                    <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
+                        <Text style={[styles.text, { fontSize: 24 }]}>0</Text>
+                        <Text style={[styles.text, styles.subText]}>Reputation</Text>
                     </View>
 
-                    <View style={{ alignSelf: "center" }}>
-                        <View style={styles.profileImage}>
-                            <Image source={require("../assets/profile_filler.jpg")} style={styles.image} resizeMode="center"></Image>
+                </View>
+
+                <View style={{ marginTop: 32 }}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        <View style={styles.mediaImageContainer}>
+                            <Image source={require("../assets/profile_media1.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
-                        <View style={styles.active}></View>
-                        <View style={styles.add}>
-                            <Ionicons name="ios-add" size={48} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
+                        <View style={styles.mediaImageContainer}>
+                            <Image source={require("../assets/profile_media2.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
-                    </View>
-
-                    <View style={styles.infoContainer}>
-                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Heisenberg</Text>
-                    </View>
-
-                    <View style={styles.statsContainer}>
-                        <View style={styles.statsBox}>
-                            <Text style={[styles.text, { fontSize: 24 }]}>1</Text>
-                            <Text style={[styles.text, styles.subText]}>Pins</Text>
+                        <View style={styles.mediaImageContainer}>
+                            <Image source={require("../assets/profile_media3.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
-                        <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
-                            <Text style={[styles.text, { fontSize: 24 }]}>0</Text>
-                            <Text style={[styles.text, styles.subText]}>Reputation</Text>
-                        </View>
-                        
-                    </View>
+                    </ScrollView>
 
-                    <View style={{ marginTop: 32 }}>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            <View style={styles.mediaImageContainer}>
-                                <Image source={require("../assets/profile_media1.jpg")} style={styles.image} resizeMode="cover"></Image>
-                            </View>
-                            <View style={styles.mediaImageContainer}>
-                                <Image source={require("../assets/profile_media2.jpg")} style={styles.image} resizeMode="cover"></Image>
-                            </View>
-                            <View style={styles.mediaImageContainer}>
-                                <Image source={require("../assets/profile_media3.jpg")} style={styles.image} resizeMode="cover"></Image>
-                            </View>
-                        </ScrollView>
+                </View>
 
-                    </View>
-                   
-                </ScrollView>
-            </SafeAreaView>
-        );
-    }
+            </ScrollView>
+        </SafeAreaView>
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -94,7 +81,7 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         height: undefined,
-        width: undefined
+        width: undefined,
     },
     titleBar: {
         flexDirection: "row",
@@ -111,7 +98,6 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 200,
         height: 200,
-        borderRadius: 100,
         overflow: "hidden"
     },
     dm: {
