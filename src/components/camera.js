@@ -19,7 +19,6 @@ export default class Camera extends Component {
                         aspect: [4, 3],
                     });
                     if (!result.canceled) {
-                        //throws warning, DO NOT TOUCH
                         this.state.photo = result.assets[0].uri;
                     }   
             }   
