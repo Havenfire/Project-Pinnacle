@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "privacy": "public",
     "plugins": [
       "expo-image-picker"
     ],
@@ -37,7 +38,8 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.pinnacle.project"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,4 +50,3 @@
       }
     }
   }
-}
