@@ -164,7 +164,7 @@ export default class SignUpPage extends Component {
                     start={{ x: 1, y: 0 }}
                     end={{ x: 0, y: 1 }}
                 />
-            </View >
+            </View>
         );
     }
 }

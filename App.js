@@ -15,13 +15,6 @@ import awsconfig from './src/aws-exports';
 Amplify.configure(awsconfig);
 
 export default function App() {
-    const username = "JohnDoe";
-    const first_name = "John";
-    const last_name = "Doe";
-    const full_name = "John Doe";
-    const email = "johndoe@example.com";
-    const profile_pic = "../src/assets/profile-pic.png";
-
     const Stack = createNativeStackNavigator();
 
     return (
