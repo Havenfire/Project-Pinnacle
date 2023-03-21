@@ -1,17 +1,21 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, SafeAreaView, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, Pressable, TouchableOpacity, Alert } from 'react-native';
 import * as Font from 'expo-font';
 import { LinearGradient } from "expo-linear-gradient";
 import TextFieldSVG from '../assets/svg/sign-in/sign-in-shade.svg';
 import SignInBtnSVG from '../assets/svg/sign-in/sign-in-button.svg';
 import SignUpBtnSVG from '../assets/svg/sign-in/create-account-button.svg';
 import SignInGoogleSVG from '../assets/svg/sign-in/sign-in-google.svg';
+import {Auth} from 'aws-amplify';
 
 export default class SignInPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             fontLoaded: false,
+            username: '',
+            password: '',
+            isLoading: false, // new state variable for loading indicator
         }
     }
 
@@ -45,7 +49,7 @@ export default class SignInPage extends Component {
     }
 
     render() {
-        const { fontLoaded } = this.state
+        const { fontLoaded, isLoading } = this.state
         if (fontLoaded) {
             return (
                 <View style={styles.container}>
@@ -60,34 +64,51 @@ export default class SignInPage extends Component {
                             <Text style={styles.title}>Welcome!</Text>
 
                             {/* Username Input */}
-                            <View style={styles.textFieldContainer}>
-                                <TextFieldSVG />
-                                <TextInput
-                                    style={styles.textFieldInput}
-                                    returnKeyType="next"
-                                    placeholder="Username / Email"
-                                />
-                            </View>
+                                <View style={styles.textFieldContainer}>
+                            <TextFieldSVG />
+                            <TextInput
+                                style={styles.textFieldInput}
+                                returnKeyType="next"
+                                placeholder="Username / Email"
+                                onChangeText={(text) => this.setState({ username: text })}
+                                value={this.state.username}
+                            />
+                        </View>
 
                             {/* Password Input */}
                             <View style={styles.textFieldContainer}>
-                                <TextFieldSVG />
-                                <TextInput
-                                    style={styles.textFieldInput}
-                                    type="password"
-                                    returnKeyType="done"
-                                    secureTextEntry={true}
-                                    placeholder="Password"
-                                />
-                            </View>
+                            <TextFieldSVG />
+                            <TextInput
+                                style={styles.textFieldInput}
+                                type="password"
+                                returnKeyType="done"
+                                secureTextEntry={true}
+                                placeholder="Password"
+                                onChangeText={(text) => this.setState({ password: text })}
+                                value={this.state.password}
+                            />
+                        </View>
 
                             {/* Sign In Button */}
                             <TouchableOpacity
                                 style={styles.textFieldContainer}
-                                onPress={() => { this.props.navigation.navigate('DefaultMap') }}
+                                onPress={async () => {
+                                    this.setState({ isLoading: true });
+                                    try {
+                                        const user = await Auth.signIn({
+                                            username: this.state.username,
+                                            password: this.state.password,
+                                        });
+                                        console.log(user);
+                                    } catch (error) {
+                                        Alert.alert(error.message);
+                                        console.log(error);
+                                    }
+                                    this.setState({ isLoading: false });
+                                }}
                             >
                                 <SignInBtnSVG />
-                                <Text style={styles.signInBtnText}>SIGN IN</Text>
+                                <Text style={styles.signInBtnText}>{this.state.isLoading ? 'LOADING...' : 'SIGN IN'}</Text>
                             </TouchableOpacity>
 
                             {/* OR Text */}

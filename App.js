@@ -7,6 +7,12 @@ import DefaultMap from "./src/components/defaultMap";
 import Profile from "./src/components/profile";
 import GoogleAuth from "./src/components/googleAuth";
 import ForgetPasswdPage from "./src/components/forgetPasswd";
+import { Amplify } from 'aws-amplify';
+//import {withAuthenticator} from 'aws-amplify-react-native';
+import awsconfig from './src/aws-exports';
+//import signUp from './src/components/signUp';
+
+Amplify.configure(awsconfig);
 
 export default function App() {
     const username = "JohnDoe";

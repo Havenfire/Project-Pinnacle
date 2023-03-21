@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, SafeAreaView, TextInput, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, Button, TouchableOpacity, TouchableHighlight, Alert} from 'react-native';
 import * as Font from 'expo-font';
 import { LinearGradient } from "expo-linear-gradient";
 import TextFieldSVG from '../assets/svg/sign-up/sign-up-shade.svg';
 import SignUpBtnSVG from '../assets/svg/sign-up/sign-up-button.svg';
 import BackBtnSVG from '../assets/svg/common/back-button.svg'
+import {Auth} from 'aws-amplify';
 
 export default class SignUpPage extends Component {
     constructor(props) {
@@ -73,6 +74,8 @@ export default class SignUpPage extends Component {
                                     style={styles.textFieldInput}
                                     returnKeyType="next"
                                     placeholder="Username"
+                                    onChangeText={(text) => this.setState({ username: text })}
+                                    value={this.state.username}
                                 />
                             </View>
 
@@ -86,6 +89,8 @@ export default class SignUpPage extends Component {
                                     inputMode="email"
                                     keyboardType="email-address"
                                     placeholder="Email"
+                                    onChangeText={(text) => this.setState({ email: text })}
+                                    value={this.state.email}
                                 />
                             </View>
 
@@ -98,6 +103,8 @@ export default class SignUpPage extends Component {
                                     type="new-password"
                                     secureTextEntry={true}
                                     placeholder="Password"
+                                    onChangeText={(text) => this.setState({ password: text })}
+                                    value={this.state.password}
                                 />
                             </View>
 
@@ -110,17 +117,39 @@ export default class SignUpPage extends Component {
                                     type="password"
                                     secureTextEntry={true}
                                     placeholder="Confirm Password"
+                                    onChangeText={(text) => this.setState({ confirmPassword: text })}
+                                    value={this.state.confirmPassword}
                                 />
                             </View>
 
                             {/* Sign Up Button */}
                             <TouchableOpacity
                                 style={styles.textFieldContainer}
-                                onPress={() => this.props.navigation.navigate('SignIn')}
+                                onPress={async () => {
+                                    if (this.state.password === this.state.confirmPassword) {
+                                        try {
+                                            const user = await Auth.signUp({
+                                                username: this.state.username,
+                                                password: this.state.password,
+                                                attributes: {
+                                                    email: this.state.email
+                                                }
+                                            });
+                                            console.log(user);
+                                        } catch (error) {
+                                            Alert.alert(error.message);
+                                            console.log(error);
+                                        }
+                                    } else {
+                                        Alert.alert("Passwords do not match.");
+                                    }
+                                }}
                             >
                                 <SignUpBtnSVG />
                                 <Text style={styles.signUpBtnText}>SIGN UP</Text>
                             </TouchableOpacity>
+
+
                         </SafeAreaView>
                     </LinearGradient>
                 </View>
