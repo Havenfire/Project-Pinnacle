@@ -5,6 +5,6 @@ cd android
 cmd /c gradlew assembleDebug
 
 cd ..
-mv ./android/app/build/outputs/apk/debug/app-debug.apk ./app-debug.apk
+mv ./android/app/build/outputs/apk/debug/app-debug.apk ./project-pinnacle-debug.apk
 
 pause
