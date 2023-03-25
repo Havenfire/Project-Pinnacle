@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
 import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from "react-native-svg";
@@ -48,6 +48,7 @@ export default class DefaultMap extends Component {
                 description: description,
                 image: image ? image : undefined,
                 dummy: dummy ? dummy : false,
+                grid: this.getAbsolutePinGrid(coordinate),
             });
         }
         return this.state.pins;
@@ -56,10 +57,36 @@ export default class DefaultMap extends Component {
     componentDidMount() {
         StatusBar.setHidden(true);
         this._getLocationAsync();
+        this.setLevel();
+    }
+
+    setLevel = () => {
+        const region = this.state.mapRegion;
+        const delta = Math.max(
+            region.latitudeDelta,
+            region.longitudeDelta
+        );
+        const levels = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
+        const multiplier = [1 / 30, 0.1, 1, 6, 60, 360, 3600];
+        for (var i = levels.length - 1; i >= 0; i--) {
+            if (delta / 10 < levels[i]) {
+                const gridMin = {
+                    latitude: Math.floor((region.latitude - region.latitudeDelta / 2) * multiplier[i]),
+                    longitude: Math.floor((region.longitude - region.longitudeDelta / 2) * multiplier[i])
+                };
+                const gridMax = {
+                    latitude: Math.floor((region.latitude + region.latitudeDelta / 2) * multiplier[i]),
+                    longitude: Math.floor((region.longitude + region.longitudeDelta / 2) * multiplier[i])
+                };
+                this.state.grid = { level: i, gridMin: gridMin, gridMax: gridMax };
+                break;
+            }
+        }
     }
 
     _handleMapRegionChange = (mapRegion) => {
         this.setState({ mapRegion });
+        this.setLevel();
     };
 
     _getLocationAsync = async () => {
@@ -90,7 +117,12 @@ export default class DefaultMap extends Component {
         this.setState({ tempTitle: title });
         this.setState({ tempTitle: description });
         this.setState({ showDialog: false });
-        this.addPin(this.state.location.coords, this.state.tempTitle, this.state.tempDescription, this.state.photo, true);
+        this.addPin(
+            this.state.location.coords,
+            this.state.tempTitle,
+            this.state.tempDescription,
+            this.state.photo, true
+        );
         this.setState({
             tempTitle: null,
             tempDescription: null,
@@ -115,6 +147,20 @@ export default class DefaultMap extends Component {
         }
     };
 
+    getAbsolutePinGrid = (coord) => {
+        const lat = coord.latitude + 90;
+        const long = coord.longitude + 180;
+        const multiplier = [1 / 30, 0.1, 1, 6, 60, 360, 3600];
+        var gridCoord = [];
+        for (var i = 0; i < multiplier.length; i++) {
+            gridCoord.push({
+                latitude: Math.floor(lat * multiplier[i]),
+                longitude: Math.floor(long * multiplier[i])
+            });
+        }
+        return gridCoord;
+    }
+
     calculateDistance = (coordinate1, coordinate2) => {
         const earthRadius = 6378137; // in meters
         const dLat = this.toRadians(coordinate2.latitude - coordinate1.latitude);
@@ -132,6 +178,53 @@ export default class DefaultMap extends Component {
 
     toRadians = (angle) => {
         return (angle * Math.PI) / 180;
+    };
+
+    drawGrid = () => {
+        var lineList = [];
+        // console.log(JSON.stringify(this.state.grid))
+        const gridMin = this.state.grid.gridMin;
+        const gridMax = this.state.grid.gridMax;
+        const multiplier = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
+        for (var i = gridMin.latitude; i <= gridMax.latitude; i++) {
+            const realLat = i * multiplier[this.state.grid.level];
+            lineList.push(
+                <Polyline
+                    coordinates={[
+                        {
+                            latitude: realLat,
+                            longitude: this.state.mapRegion.longitude - this.state.mapRegion.longitudeDelta / 2
+                        },
+                        {
+                            latitude: realLat,
+                            longitude: this.state.mapRegion.longitude + this.state.mapRegion.longitudeDelta / 2
+                        },
+                    ]}
+                />
+            );
+        }
+        for (var i = gridMin.longitude; i <= gridMax.longitude; i++) {
+            const realLong = i * multiplier[this.state.grid.level];
+            lineList.push(
+                <Polyline
+                    coordinates={[
+                        {
+                            latitude: this.state.mapRegion.latitude - this.state.mapRegion.latitudeDelta / 2,
+                            longitude: realLong,
+                        },
+                        {
+                            latitude: this.state.mapRegion.latitude + this.state.mapRegion.latitudeDelta / 2,
+                            longitude: realLong,
+                        },
+                    ]}
+                />
+            );
+        }
+        return (
+            <React.Fragment>
+                {lineList}
+            </React.Fragment>
+        );
     };
 
     render() {
@@ -154,23 +247,14 @@ export default class DefaultMap extends Component {
                         ? this.state.pins.map((pin) => (
                             <React.Fragment key={pin.coordinate}>
                                 <Marker
-                                    ref={(ref) => {
-                                        redraw = ref;
-                                    }}
+                                    // ref={(ref) => {
+                                    //     redraw = ref;
+                                    // }}
                                     coordinate={pin.coordinate}
                                     title={pin.title}
                                     description={pin.description}
                                     draggable={pin.dummy}
-                                    // redraw={() => this.forceUpdate()}
                                     onDragEnd={(e) => {
-                                        // const marker = this.marker; // marker is not a direct reference to dragged pin, but marker.props has identical elements
-
-                                        // const lat1 = this.marker.props.coordinate.latitude;
-                                        // const long1 = this.marker.props.coordinate.longitude;
-
-                                        // const lat2 = e.nativeEvent.coordinate.latitude;
-                                        // const long2 = e.nativeEvent.coordinate.longitude;
-
                                         const distance = this.calculateDistance(pin.coordinate, e.nativeEvent.coordinate);
 
                                         if (distance >= 100) {
@@ -178,8 +262,8 @@ export default class DefaultMap extends Component {
                                         } else {
                                             const dummyPinIndex = this.state.pins.findIndex((dummy) => {
                                                 return (
-                                                    Math.abs(dummy.coordinate.latitude - pin.coordinate.latitude) < 1e-10 &&
-                                                    Math.abs(dummy.coordinate.longitude - pin.coordinate.longitude) < 1e-10
+                                                    Math.abs(dummy.coordinate.latitude - pin.coordinate.latitude) < 1e-7 &&
+                                                    Math.abs(dummy.coordinate.longitude - pin.coordinate.longitude) < 1e-7
                                                 );
                                             });
                                             this.addPin(
@@ -220,6 +304,7 @@ export default class DefaultMap extends Component {
                             </React.Fragment>
                         ))
                         : null}
+                    {this.state.grid ? (this.drawGrid()) : null}
                 </MapView>
 
                 <View style={styles.titleBar}>
