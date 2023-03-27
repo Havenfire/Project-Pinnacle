@@ -6,7 +6,7 @@ import TextFieldSVG from '../assets/svg/sign-in/sign-in-shade.svg';
 import SignInBtnSVG from '../assets/svg/sign-in/sign-in-button.svg';
 import SignUpBtnSVG from '../assets/svg/sign-in/create-account-button.svg';
 import SignInGoogleSVG from '../assets/svg/sign-in/sign-in-google.svg';
-import {Auth} from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 
 export default class SignInPage extends Component {
     constructor(props) {
@@ -64,30 +64,30 @@ export default class SignInPage extends Component {
                             <Text style={styles.title}>Welcome!</Text>
 
                             {/* Username Input */}
-                                <View style={styles.textFieldContainer}>
-                            <TextFieldSVG />
-                            <TextInput
-                                style={styles.textFieldInput}
-                                returnKeyType="next"
-                                placeholder="Username / Email"
-                                onChangeText={(text) => this.setState({ username: text })}
-                                value={this.state.username}
-                            />
-                        </View>
+                            <View style={styles.textFieldContainer}>
+                                <TextFieldSVG />
+                                <TextInput
+                                    style={styles.textFieldInput}
+                                    returnKeyType="next"
+                                    placeholder="Username / Email"
+                                    onChangeText={(text) => this.setState({ username: text })}
+                                    value={this.state.username}
+                                />
+                            </View>
 
                             {/* Password Input */}
                             <View style={styles.textFieldContainer}>
-                            <TextFieldSVG />
-                            <TextInput
-                                style={styles.textFieldInput}
-                                type="password"
-                                returnKeyType="done"
-                                secureTextEntry={true}
-                                placeholder="Password"
-                                onChangeText={(text) => this.setState({ password: text })}
-                                value={this.state.password}
-                            />
-                        </View>
+                                <TextFieldSVG />
+                                <TextInput
+                                    style={styles.textFieldInput}
+                                    type="password"
+                                    returnKeyType="done"
+                                    secureTextEntry={true}
+                                    placeholder="Password"
+                                    onChangeText={(text) => this.setState({ password: text })}
+                                    value={this.state.password}
+                                />
+                            </View>
 
                             {/* Sign In Button */}
                             <TouchableOpacity
@@ -129,6 +129,13 @@ export default class SignInPage extends Component {
                             <View style={styles.textContainer}>
                                 <Pressable onPress={() => { this.props.navigation.navigate('ForgetPasswd') }}>
                                     <Text style={styles.textForget}>Forgot Password?</Text>
+                                </Pressable>
+                            </View>
+
+                            {/* Continue without Sign In */}
+                            <View style={styles.textContainer}>
+                                <Pressable onPress={() => { this.props.navigation.navigate('DefaultMap') }}>
+                                    <Text style={styles.textForget}>Continue w/o Sign In</Text>
                                 </Pressable>
                             </View>
 
