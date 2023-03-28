@@ -3,7 +3,7 @@
   "cognitoConfig": {
     "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "projec5509a4a9",
+    "resourceNameTruncated": "projecc69fda69",
     "userPoolName": "ProjectPinnacle",
     "autoVerifiedAttributes": [
       "email"
@@ -32,9 +32,9 @@
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [],
     "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "Projec5509a4a9_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "Projecc69fda69_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "5509a4a9",
+    "sharedId": "c69fda69",
     "resourceName": "ProjectPinnacle",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",

@@ -1,15 +1,15 @@
 {
   "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-amplify16320ba4ca224-staging-24237-authRole",
-      "UnauthRoleArn": "arn:aws:iam::345595833761:role/amplify-amplify16320ba4ca224-staging-24237-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::345595833761:role/amplify-amplify16320ba4ca224-staging-24237-authRole",
-      "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-amplify16320ba4ca224-staging-24237-deployment",
-      "UnauthRoleName": "amplify-amplify16320ba4ca224-staging-24237-unauthRole",
-      "StackName": "amplify-amplify16320ba4ca224-staging-24237",
-      "StackId": "arn:aws:cloudformation:us-east-2:345595833761:stack/amplify-amplify16320ba4ca224-staging-24237/e05b44b0-c6c8-11ed-bd96-0222c59cf53c",
-      "AmplifyAppId": "df4qgl8qwy8s1"
+      "AuthRoleName": "amplify-projectpinnacle-staging-35418-authRole",
+      "UnauthRoleArn": "arn:aws:iam::345595833761:role/amplify-projectpinnacle-staging-35418-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::345595833761:role/amplify-projectpinnacle-staging-35418-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-projectpinnacle-staging-35418-deployment",
+      "UnauthRoleName": "amplify-projectpinnacle-staging-35418-unauthRole",
+      "StackName": "amplify-projectpinnacle-staging-35418",
+      "StackId": "arn:aws:cloudformation:us-east-1:345595833761:stack/amplify-projectpinnacle-staging-35418/e2b7fc60-cb89-11ed-a5fa-0a24197cb609",
+      "AmplifyAppId": "d3mmadv352pdwx"
     },
     "categories": {
       "auth": {

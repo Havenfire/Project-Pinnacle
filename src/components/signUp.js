@@ -135,6 +135,9 @@ export default class SignUpPage extends Component {
                                                     email: this.state.email
                                                 }
                                             });
+
+                                            this.props.navigation.navigate("ConfirmationCodeScreen", {user});
+
                                             console.log(user);
                                         } catch (error) {
                                             Alert.alert(error.message);
