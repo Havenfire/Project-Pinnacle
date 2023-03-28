@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
+import { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
+import MapView from "react-native-map-clustering";
 import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from "react-native-svg";
@@ -39,25 +40,47 @@ export default class DefaultMap extends Component {
 
     addPin(coordinate, title, description, image, dummy) {
         if (coordinate && title && description) {
-            this.state.pins = this.state.pins.concat({
-                coordinate: {
-                    latitude: coordinate.latitude,
-                    longitude: coordinate.longitude,
-                },
-                title: title,
-                description: description,
-                image: image ? image : undefined,
-                dummy: dummy ? dummy : false,
-                grid: this.getAbsolutePinGrid(coordinate),
-            });
+            if (dummy) {
+                this.state.dummyPin = ({
+                    coordinate: {
+                        latitude: coordinate.latitude,
+                        longitude: coordinate.longitude,
+                    },
+                    title: title,
+                    description: description,
+                    image: image ? image : undefined,
+                    // grid: this.getAbsolutePinGrid(coordinate),
+                });
+            } else {
+                delete this.state.dummyPin;
+                this.state.pins.push({
+                    coordinate: {
+                        latitude: coordinate.latitude,
+                        longitude: coordinate.longitude,
+                    },
+                    title: title,
+                    description: description,
+                    image: image ? image : undefined,
+                    // grid: this.getAbsolutePinGrid(coordinate),
+                });
+            }
+            this.forceUpdate();
         }
         return this.state.pins;
     }
 
     componentDidMount() {
         StatusBar.setHidden(true);
+        for (let i = 0; i < 50; i++) {
+            this.state.pins.push({
+                coordinate: {
+                    latitude: Math.random() * (0.1) + 33.727187,
+                    longitude: Math.random() * (0.1) + -84.372187,
+                },
+            })
+        }
         this._getLocationAsync();
-        this.setLevel();
+        // this.setLevel();
     }
 
     setLevel = () => {
@@ -180,6 +203,94 @@ export default class DefaultMap extends Component {
         return (angle * Math.PI) / 180;
     };
 
+    drawDummyPin = () => {
+        let pin = this.state.dummyPin;
+        return (
+            <React.Fragment>
+                <Marker
+                    coordinate={pin.coordinate}
+                    title={pin.title}
+                    description={pin.description}
+                    draggable={true}
+                    onDragEnd={(e) => {
+                        const distance = this.calculateDistance(pin.coordinate, e.nativeEvent.coordinate);
+
+                        if (distance >= 100) {
+                            alert("The pin must stay within the red circle.");
+                        } else {
+                            const dummyPinIndex = this.state.pins.findIndex((dummy) => {
+                                return (
+                                    Math.abs(dummy.coordinate.latitude - pin.coordinate.latitude) < 1e-7 &&
+                                    Math.abs(dummy.coordinate.longitude - pin.coordinate.longitude) < 1e-7
+                                );
+                            });
+                            this.addPin(
+                                e.nativeEvent.coordinate,
+                                pin.title,
+                                pin.description,
+                                pin.image,
+                                false
+                            );
+                            if (dummyPinIndex > -1) {
+                                this.state.pins.splice(dummyPinIndex, 1);
+                            }
+                            this.forceUpdate();
+                        }
+                    }}>
+                    <Callout>
+                        <Text>{pin.title}</Text>
+                        <Text>{pin.description}</Text>
+                        <Svg width={240} height={180}>
+                            <ImageSvg
+                                width={"100%"}
+                                height={"100%"}
+                                preserveAspectRatio="xMidYMid slice"
+                                href={{ uri: pin.image ? pin.image : null }}
+                            />
+                        </Svg>
+                    </Callout>
+                </Marker>
+                <Circle
+                    center={pin.coordinate}
+                    radius={100}
+                    fillColor={"rgba(255, 0, 0, 0.2)"}
+                    strokeColor={"rgba(255, 0, 0, 0.5)"}
+                    strokeWidth={2}
+                />
+            </React.Fragment>
+        )
+    }
+
+    drawPins = () => {
+        var pinList = [];
+        for (var pin of this.state.pins) {
+            pinList.push(
+                <Marker
+                    coordinate={pin.coordinate}
+                    title={pin.title}
+                    description={pin.description}
+                >
+                    {pin.title && pin.description ? (
+                        <Callout>
+                            <Text>{pin.title}</Text>
+                            <Text>{pin.description}</Text>
+                            {pin.image ? (<Svg width={240} height={180}>
+                                <ImageSvg
+                                    width={"100%"}
+                                    height={"100%"}
+                                    preserveAspectRatio="xMidYMid slice"
+                                    href={{ uri: pin.image ? pin.image : null }}
+                                />
+                            </Svg>) : null}
+                        </Callout>
+                    ) : null}
+                </Marker>
+
+            )
+        }
+        return pinList;
+    }
+
     drawGrid = () => {
         var lineList = [];
         // console.log(JSON.stringify(this.state.grid))
@@ -241,70 +352,12 @@ export default class DefaultMap extends Component {
                         latitudeDelta: this.state.location.coords.accuracy * 0.001,
                         longitudeDelta: this.state.location.coords.accuracy * 0.0005,
                     }}
+                    radius={Dimensions.get('window').width * 0.1}
                     onRegionChange={this._handleMapRegionChange}
                     onMarkerPress={() => this.setState({ showDialog: false })}>
-                    {this.state.pins
-                        ? this.state.pins.map((pin) => (
-                            <React.Fragment key={pin.coordinate}>
-                                <Marker
-                                    // ref={(ref) => {
-                                    //     redraw = ref;
-                                    // }}
-                                    coordinate={pin.coordinate}
-                                    title={pin.title}
-                                    description={pin.description}
-                                    draggable={pin.dummy}
-                                    onDragEnd={(e) => {
-                                        const distance = this.calculateDistance(pin.coordinate, e.nativeEvent.coordinate);
-
-                                        if (distance >= 100) {
-                                            alert("The pin must stay within the red circle.");
-                                        } else {
-                                            const dummyPinIndex = this.state.pins.findIndex((dummy) => {
-                                                return (
-                                                    Math.abs(dummy.coordinate.latitude - pin.coordinate.latitude) < 1e-7 &&
-                                                    Math.abs(dummy.coordinate.longitude - pin.coordinate.longitude) < 1e-7
-                                                );
-                                            });
-                                            this.addPin(
-                                                e.nativeEvent.coordinate,
-                                                pin.title,
-                                                pin.description,
-                                                pin.image,
-                                                false
-                                            );
-                                            if (dummyPinIndex > -1) {
-                                                this.state.pins.splice(dummyPinIndex, 1);
-                                            }
-                                            this.forceUpdate();
-                                        }
-                                    }}>
-                                    <Callout>
-                                        <Text>{pin.title}</Text>
-                                        <Text>{pin.description}</Text>
-                                        <Svg width={240} height={180}>
-                                            <ImageSvg
-                                                width={"100%"}
-                                                height={"100%"}
-                                                preserveAspectRatio="xMidYMid slice"
-                                                href={{ uri: pin.image ? pin.image : null }}
-                                            />
-                                        </Svg>
-                                    </Callout>
-                                </Marker>
-                                {pin.dummy ? (
-                                    <Circle
-                                        center={pin.coordinate}
-                                        radius={100}
-                                        fillColor={"rgba(255, 0, 0, 0.2)"}
-                                        strokeColor={"rgba(255, 0, 0, 0.5)"}
-                                        strokeWidth={2}
-                                    />
-                                ) : null}
-                            </React.Fragment>
-                        ))
-                        : null}
-                    {this.state.grid ? (this.drawGrid()) : null}
+                    {this.state.dummyPin ? this.drawDummyPin() : null}
+                    {this.state.pins ? this.drawPins() : null}
+                    {/* {this.state.grid ? (this.drawGrid()) : null} */}
                 </MapView>
 
                 <View style={styles.titleBar}>

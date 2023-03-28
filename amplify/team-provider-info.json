@@ -16,5 +16,23 @@
         "ProjectPinnacle": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-projectpinnacle-dev-201708-authRole",
+      "UnauthRoleArn": "arn:aws:iam::345595833761:role/amplify-projectpinnacle-dev-201708-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::345595833761:role/amplify-projectpinnacle-dev-201708-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-projectpinnacle-dev-201708-deployment",
+      "UnauthRoleName": "amplify-projectpinnacle-dev-201708-unauthRole",
+      "StackName": "amplify-projectpinnacle-dev-201708",
+      "StackId": "arn:aws:cloudformation:us-east-1:345595833761:stack/amplify-projectpinnacle-dev-201708/b66436a0-cc34-11ed-85c8-0e6bdf87789d",
+      "AmplifyAppId": "d2k2qbprig8j7u"
+    },
+    "categories": {
+      "auth": {
+        "ProjectPinnacle": {}
+      }
+    }
   }
 }
