@@ -10,6 +10,9 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import mapStyle from "../themes/mapStyle.json";
 import mapStyleDark from "../themes/mapStyleDark.json";
 
+import { DataStore } from '@aws-amplify/datastore';
+import { StoreImage, Pin } from '../models';
+
 export default class DefaultMap extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +41,7 @@ export default class DefaultMap extends Component {
         };
     }
 
-    addPin(coordinate, title, description, image, dummy) {
+    async addPin(coordinate, title, description, image, dummy) {
         if (coordinate && title && description) {
             if (dummy) {
                 this.state.dummyPin = ({
@@ -64,6 +67,20 @@ export default class DefaultMap extends Component {
                     // grid: this.getAbsolutePinGrid(coordinate),
                 });
             }
+
+            await DataStore.save(
+                new Pin({
+                    "title": title,
+                    "description": description,
+                    "coordinates": [coordinate.latitude, coordinate.longitude],
+                    "time_added": '1970-01-01T12:30:23.999Z',
+                    "reputation": 0,
+                })
+            );
+            const pins = await DataStore.query(Pin);
+            console.log(pins);
+            
+
             this.forceUpdate();
         }
         return this.state.pins;

@@ -1,0 +1,8 @@
+type Pin @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  description: String
+  coordinates: [Float!]
+  reputation: Int!
+  image: AWSURL!
+}

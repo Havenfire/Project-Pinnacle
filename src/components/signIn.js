@@ -99,7 +99,9 @@ export default class SignInPage extends Component {
                                             username: this.state.username,
                                             password: this.state.password,
                                         });
-                                        console.log(user);
+
+                                        this.props.navigation.navigate("DefaultMap");
+
                                     } catch (error) {
                                         Alert.alert(error.message);
                                         console.log(error);

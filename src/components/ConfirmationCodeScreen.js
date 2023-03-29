@@ -4,14 +4,11 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Pressable,
   TouchableOpacity,
-  Alert
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import { Auth } from 'aws-amplify';
-import { useForm } from 'react-hook-form';
 import { useRoute } from "@react-navigation/native";
 
 const ConfirmationCodeScreen = () => {
@@ -31,22 +28,22 @@ const ConfirmationCodeScreen = () => {
 
   async function resendConfirmationCode() {
     try {
-        await Auth.resendSignUp(username);
-        console.log('code resent successfully');
+      await Auth.resendSignUp(username);
+      console.log('code resent successfully');
     } catch (err) {
-        console.log('error resending code: ', err);
+      console.log('error resending code: ', err);
     }
-}
+  }
 
   return (
     <View style={[styles.confirmationCodeScreen, styles.buttonSolidFlexBox]}>
       <View style={styles.pleaseEnterTheConfirmationWrapper}>
         <Text style={styles.pleaseEnterThe}>
           Please enter the confirmation code sent to your email
-          
+
         </Text>
       </View>
-      
+
       <TextInput
         style={[styles.confirmationCodeScreenChild, styles.mt44]}
         placeholder="000000"
