@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, StatusBar, Button, SafeAreaView, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, SafeAreaView, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
 import MapView from "react-native-map-clustering";
@@ -9,6 +9,9 @@ import { Svg, Image as ImageSvg } from "react-native-svg";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import mapStyle from "../themes/mapStyle.json";
 import mapStyleDark from "../themes/mapStyleDark.json";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { Border, Color, Padding } from "../GlobalStyles";
 
 export default class DefaultMap extends Component {
     constructor(props) {
@@ -36,6 +39,7 @@ export default class DefaultMap extends Component {
             photo: null,
             theme: mapStyle,
         };
+        this.mapRef=React.createRef();
     }
 
     addPin(coordinate, title, description, image, dummy) {
@@ -338,11 +342,26 @@ export default class DefaultMap extends Component {
         );
     };
 
+    animatetoCL(){
+        let r={
+            latitude: this.state.location.latitude,
+            longitude: this.state.location.longitude,
+            latitudeDelta: this.state.mapRegion.latitudeDelta,
+            longitudeDelta:this.state.mapRegion.longitudeDelta,
+        };
+        this.mapRef.current.animateToRegion(r);
+    };
+    onUserLocationChange = () => {
+            this._getLocationAsync();
+        };
+
     render() {
         return (
             <View style={styles.container}>
                 <MapView
                     style={styles.map}
+                    showsUserlocation={true}
+                    ref = {this.mapRef}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
                     mapPadding={{ left: 0, right: 0, top: 0, bottom: 24 }}
@@ -360,50 +379,63 @@ export default class DefaultMap extends Component {
                     {/* {this.state.grid ? (this.drawGrid()) : null} */}
                 </MapView>
 
-                <View style={styles.titleBar}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate("DefaultMap");
-                        }}>
-                        <Ionicons name="search" size={36} color={this.getButtonColor()} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate("DefaultMap");
-                        }}>
-                        <Ionicons name="menu" size={36} color={this.getButtonColor()} />
-                    </TouchableOpacity>
+                <View style={[styles.titleBar, styles.parentFlexBox, styles.parentFlexBox1]}>
+                    <TextInput // search bar
+                        style={[styles.expandedSearchBar, styles.parentFlexBox]}
+                        placeholder="Search"
+                        keyboardType="default"
+                        placeholderTextColor="rgba(36, 28, 28, 0.6)"
+                    />
+                    <Pressable // hamburger menu button
+                        style={[styles.iconMenu, styles.ml16]}
+                        onPress={() => this.props.navigation.toggleDrawer()}
+                    >
+                        <Image
+                            style={styles.icon}
+                            resizeMode="cover"
+                            source={require("../assets/-icon-menu.png")}
+                        />
+                    </Pressable>
                 </View>
-                <View style={styles.navBar}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            if (this.state.theme === mapStyle) {
-                                this.setState({ theme: mapStyleDark });
-                            } else {
-                                this.setState({ theme: mapStyle });
-                            }
-                        }}>
-                        <Ionicons
-                            name={this.state.theme === mapStyle ? "sunny" : "moon"}
-                            size={36}
-                            color={this.getButtonColor()}
-                            reflect-horizontal={false}
+                <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1,]}>
+                    <TouchableOpacity // saved pins heart button
+                        style={styles.iconMenu}
+                        activeOpacity={0.2}
+                        onPress={() =>
+                            {this.props.navigation.navigate("SavedPinsScreen")}
+                        }
+                    >
+                        <Image
+                            style={styles.icon}
+                            resizeMode="cover"
+                            source={require("../assets/-icon-heart1.png")}
                         />
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    <TouchableOpacity // add pin plus button
+                        style={styles.iconCircleX}
+                        activeOpacity={0.2}
                         onPress={() => {
                             this.localGetPinInfo();
                         }}>
-                        <Ionicons name="add-circle" size={36} color={this.getButtonColor()} />
+                        <Image
+                            style={styles.icon}
+                            resizeMode="cover"
+                            source={require("../assets/-icon-circle-x1.png")}
+                        />
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    <TouchableOpacity // jump to current location button
+                        style={styles.iconLocation}
+                        activeOpacity={0.2}
                         onPress={() => {
-                            this.props.navigation.navigate("DefaultMap");
+                            this.animatetoCL();
                         }}>
-                        <Ionicons name="heart" size={36} color={this.getButtonColor()} />
+                        <Image
+                            style={styles.icon}
+                            resizeMode="cover"
+                            source={require("../assets/-icon-location.png")}
+                        />
                     </TouchableOpacity>
                 </View>
 
@@ -460,4 +492,52 @@ const styles = StyleSheet.create({
         paddingHorizontal: "5%",
         paddingVertical: "5%",
     },
+    ml16: {
+        marginLeft: 16,
+      },
+      parentFlexBox1: {
+        alignSelf: "stretch",
+        flexDirection: "row",
+      },
+      parentFlexBox: {
+        flexDirection: "row",
+        alignItems: "center",
+      },
+      expandedSearchBar: {
+        borderRadius: Border.br_12xl_5,
+        backgroundColor: Color.whitesmoke_200,
+        height: 42,
+        paddingHorizontal: Padding.p_smi,
+        paddingVertical: Padding.p_8xs,
+        flexDirection: "row",
+        flex: 1,
+      },
+      icon: {
+        height: "100%",
+        width: "100%",
+      },
+      iconMenu: {
+        height: 26,
+        width: 30,
+      },
+      iconCircleX: {
+        width: 85,
+        height: 85,
+      },
+      iconLocation: {
+        height: 30,
+        width: 30,
+      },
+      iconHeartParent: {
+        justifyContent: "space-between",
+      },
+      homePageOverlay: {
+        backgroundColor: "transparent",
+        height: 800,
+        padding: Padding.p_base,
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        flex: 1,
+      },
 });

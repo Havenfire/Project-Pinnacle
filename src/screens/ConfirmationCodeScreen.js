@@ -21,7 +21,7 @@ const ConfirmationCodeScreen = () => {
   const [code, setCode] = React.useState('');
 
   async function confirmSignUp() {
-    try {
+    try { 
       await Auth.confirmSignUp(username, code);
       navigation.navigate("DefaultMap");
     } catch (error) {
