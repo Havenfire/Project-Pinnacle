@@ -4,8 +4,9 @@ import { schema } from './schema';
 
 
 
-const { Pin } = initSchema(schema);
+const { Pin, StoreImage } = initSchema(schema);
 
 export {
-  Pin
+  Pin,
+  StoreImage
 };

@@ -7,6 +7,9 @@ import SignInBtnSVG from '../assets/svg/sign-in/sign-in-button.svg';
 import SignUpBtnSVG from '../assets/svg/sign-in/create-account-button.svg';
 import SignInGoogleSVG from '../assets/svg/sign-in/sign-in-google.svg';
 import { Auth } from 'aws-amplify';
+import WelcomeCard from "../components/WelcomeCard";
+import Buttons from "../components/Buttons";
+import { Padding } from "../GlobalStyles";
 
 export default class SignInPage extends Component {
     constructor(props) {
