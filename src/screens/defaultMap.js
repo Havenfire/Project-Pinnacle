@@ -399,7 +399,7 @@ export default class DefaultMap extends Component {
             <View style={styles.container}>
                 <MapView
                     style={styles.map}
-                    showsUserlocation={true}
+                    showsUserLocation={true}
                     ref = {this.mapRef}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
