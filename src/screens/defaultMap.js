@@ -382,8 +382,9 @@ export default class DefaultMap extends Component {
 
     animatetoCL(){
         let r={
-            latitude: this.state.location.latitude,
-            longitude: this.state.location.longitude,
+            latitude: this.state.location.coords.latitude,
+            longitude: this.state.location.coords.longitude,
+            
             latitudeDelta: this.state.mapRegion.latitudeDelta,
             longitudeDelta:this.state.mapRegion.longitudeDelta,
         };
