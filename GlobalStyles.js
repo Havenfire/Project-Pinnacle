@@ -1,6 +1,6 @@
 /* fonts */
 export const FontFamily = {
-  montserratRegular: "Montserrat",
+  montserratRegular: "Montserrat_regular",
   montserratExtrabold: "Montserrat_extrabold",
   montserratLight: "Montserrat_light",
   montserratBold: "Montserrat_bold",
@@ -43,11 +43,11 @@ export const Padding = {
 /* Margins */
 export const Margin = {
   m_base: 16,
+  m_3xs: 10,
   m_sm: 14,
+  m_25xl: 44,
   m_8xs: 5,
   m_11xs: 2,
-  m_3xs: 10,
-  m_25xl: 44,
 };
 /* border radiuses */
 export const Border = {

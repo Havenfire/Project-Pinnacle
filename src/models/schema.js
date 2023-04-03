@@ -42,8 +42,8 @@ export const schema = {
                 "image_uri": {
                     "name": "image_uri",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "AWSURL",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
