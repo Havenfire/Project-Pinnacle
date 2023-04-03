@@ -11,7 +11,8 @@ import mapStyle from "../themes/mapStyle.json";
 import mapStyleDark from "../themes/mapStyleDark.json";
 
 import { DataStore } from '@aws-amplify/datastore';
-import { StoreImage, Pin } from '../models';
+import { Pin } from '../models';
+import { Storage } from "@aws-amplify/storage"
 
 export default class DefaultMap extends Component {
     constructor(props) {
@@ -67,24 +68,48 @@ export default class DefaultMap extends Component {
                     // grid: this.getAbsolutePinGrid(coordinate),
                 });
             }
+            if (!dummy) {
+                const filename = `${coordinate.latitude}_${coordinate.longitude}.jpeg`;
+                this.uploadImageToS3(filename, image);
 
-            await DataStore.save(
-                new Pin({
-                    "title": title,
-                    "description": description,
-                    "coordinates": [coordinate.latitude, coordinate.longitude],
-                    "time_added": '1970-01-01T12:30:23.999Z',
-                    "reputation": 0,
-                })
-            );
-            const pins = await DataStore.query(Pin);
-            console.log(pins);
+
+                await DataStore.save(
+                    new Pin({
+                        "title": title,
+                        "description": description,
+                        "coordinates": [coordinate.latitude, coordinate.longitude],
+                        "reputation": 0,
+                        "image_uri": filename,
+                    })
+                );
+
             
+    
 
+                const models = await DataStore.query(Pin);
+                console.log(models);
+
+            }
             this.forceUpdate();
         }
         return this.state.pins;
     }
+
+    async uploadImageToS3(img_name, imageUri) {
+        const key = img_name;
+        const contentType = 'image/jpeg';
+
+        try {
+            const response = await fetch(imageUri);
+            const blob = await response.blob();
+            await Storage.put(key, blob, { contentType });
+            console.log('Image uploaded successfully');
+        } catch (error) {
+            console.log('Error uploading image:', error);
+        }
+    }
+
+
 
     componentDidMount() {
         StatusBar.setHidden(true);
@@ -99,6 +124,11 @@ export default class DefaultMap extends Component {
         this._getLocationAsync();
         // this.setLevel();
     }
+
+
+
+
+
 
     setLevel = () => {
         const region = this.state.mapRegion;

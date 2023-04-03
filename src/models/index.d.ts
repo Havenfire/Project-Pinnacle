@@ -16,7 +16,7 @@ type EagerPin = {
   readonly description?: string | null;
   readonly coordinates?: number[] | null;
   readonly reputation: number;
-  readonly image: string;
+  readonly image_uri?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -31,7 +31,7 @@ type LazyPin = {
   readonly description?: string | null;
   readonly coordinates?: number[] | null;
   readonly reputation: number;
-  readonly image: string;
+  readonly image_uri?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

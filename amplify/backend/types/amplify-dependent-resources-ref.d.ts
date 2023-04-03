@@ -16,5 +16,11 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolId": "string",
       "UserPoolName": "string"
     }
+  },
+  "storage": {
+    "s3projectpinnaclestorage2e45e751": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }
