@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, SafeAreaView, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
-
+import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import Constants from 'expo-constants';
 import * as Location from "expo-location";
 import { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
 import MapView from "react-native-map-clustering";
@@ -18,6 +18,7 @@ import { Border, Color, Padding } from "../GlobalStyles";
 import { DataStore } from '@aws-amplify/datastore';
 import { Pin } from '../models';
 
+const statusBarHeight = Constants.statusBarHeight;
 export default class DefaultMap extends Component {
     constructor(props) {
         super(props);
@@ -44,7 +45,7 @@ export default class DefaultMap extends Component {
             photo: null,
             theme: mapStyle,
         };
-        this.mapRef=React.createRef();
+        this.mapRef = React.createRef();
     }
 
     async addPin(coordinate, title, description, image, dummy) {
@@ -88,7 +89,7 @@ export default class DefaultMap extends Component {
                         "image_uri": filename,
                     })
                 );
-            
+
             }
             this.forceUpdate();
         }
@@ -380,19 +381,19 @@ export default class DefaultMap extends Component {
         );
     };
 
-    animatetoCL(){
-        let r={
+    animatetoCL() {
+        let r = {
             latitude: this.state.location.coords.latitude,
             longitude: this.state.location.coords.longitude,
-            
+
             latitudeDelta: this.state.mapRegion.latitudeDelta,
-            longitudeDelta:this.state.mapRegion.longitudeDelta,
+            longitudeDelta: this.state.mapRegion.longitudeDelta,
         };
         this.mapRef.current.animateToRegion(r);
     };
     onUserLocationChange = () => {
-            this._getLocationAsync();
-        };
+        this._getLocationAsync();
+    };
 
     render() {
         return (
@@ -400,7 +401,7 @@ export default class DefaultMap extends Component {
                 <MapView
                     style={styles.map}
                     showsUserLocation={true}
-                    ref = {this.mapRef}
+                    ref={this.mapRef}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
                     mapPadding={{ left: 0, right: 0, top: 0, bottom: 24 }}
@@ -423,7 +424,7 @@ export default class DefaultMap extends Component {
                         style={[styles.expandedSearchBar, styles.parentFlexBox]}
                         placeholder="Search"
                         keyboardType="default"
-                        placeholderTextColor="rgba(36, 28, 28, 0.6)"
+                        placeholderTextColor="rgba(255, 255, 255, 0.8)"
                     />
                     <Pressable // hamburger menu button
                         style={[styles.iconMenu, styles.ml16]}
@@ -432,22 +433,21 @@ export default class DefaultMap extends Component {
                         <Image
                             style={styles.icon}
                             resizeMode="cover"
-                            source={require("../assets/-icon-menu.png")}
+                            source={require("../assets/-icon-menu-dark.png")}
                         />
                     </Pressable>
                 </View>
                 <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1,]}>
                     <TouchableOpacity // saved pins heart button
-                        style={styles.iconMenu}
+                        style={styles.iconHeart}
                         activeOpacity={0.2}
-                        onPress={() =>
-                            {this.props.navigation.navigate("SavedPinsScreen")}
+                        onPress={() => { this.props.navigation.navigate("SavedPinsScreen") }
                         }
                     >
                         <Image
                             style={styles.icon}
                             resizeMode="cover"
-                            source={require("../assets/-icon-heart1.png")}
+                            source={require("../assets/-icon-heart-dark.png")}
                         />
                     </TouchableOpacity>
 
@@ -460,7 +460,7 @@ export default class DefaultMap extends Component {
                         <Image
                             style={styles.icon}
                             resizeMode="cover"
-                            source={require("../assets/-icon-circle-x1.png")}
+                            source={require("../assets/-icon-circle-dark.png")}
                         />
                     </TouchableOpacity>
 
@@ -473,7 +473,7 @@ export default class DefaultMap extends Component {
                         <Image
                             style={styles.icon}
                             resizeMode="cover"
-                            source={require("../assets/-icon-location.png")}
+                            source={require("../assets/-icon-location-dark.png")}
                         />
                     </TouchableOpacity>
                 </View>
@@ -511,14 +511,14 @@ const styles = StyleSheet.create({
 
     titleBar: {
         position: "absolute",
-        top: 0,
+        top: statusBarHeight,
         left: 0,
         right: 0,
         alignSelf: "center",
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: "5%",
-        paddingVertical: "5%",
+        // paddingVertical: "5%",
     },
 
     navBar: {
@@ -533,44 +533,48 @@ const styles = StyleSheet.create({
     },
     ml16: {
         marginLeft: 16,
-      },
-      parentFlexBox1: {
+    },
+    parentFlexBox1: {
         alignSelf: "stretch",
         flexDirection: "row",
-      },
-      parentFlexBox: {
+    },
+    parentFlexBox: {
         flexDirection: "row",
         alignItems: "center",
-      },
-      expandedSearchBar: {
+    },
+    expandedSearchBar: {
         borderRadius: Border.br_12xl_5,
-        backgroundColor: Color.whitesmoke_200,
+        backgroundColor: "rgba(12, 12, 12, 0.5)",
         height: 42,
         paddingHorizontal: Padding.p_smi,
         paddingVertical: Padding.p_8xs,
         flexDirection: "row",
         flex: 1,
-      },
-      icon: {
+    },
+    icon: {
         height: "100%",
         width: "100%",
-      },
-      iconMenu: {
-        height: 26,
-        width: 30,
-      },
-      iconCircleX: {
-        width: 85,
-        height: 85,
-      },
-      iconLocation: {
+    },
+    iconMenu: {
         height: 30,
         width: 30,
-      },
-      iconHeartParent: {
+    },
+    iconHeart: {
+        height: 26,
+        width: 30,
+    },
+    iconCircleX: {
+        width: 65,
+        height: 65,
+    },
+    iconLocation: {
+        height: 30,
+        width: 30,
+    },
+    iconHeartParent: {
         justifyContent: "space-between",
-      },
-      homePageOverlay: {
+    },
+    homePageOverlay: {
         backgroundColor: "transparent",
         height: 800,
         padding: Padding.p_base,
@@ -578,5 +582,5 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         flex: 1,
-      },
+    },
 });
