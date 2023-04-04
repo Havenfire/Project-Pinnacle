@@ -15,6 +15,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, Padding } from "../GlobalStyles";
 
+import { Storage } from "@aws-amplify/storage"
+
 import { DataStore } from '@aws-amplify/datastore';
 import { Pin } from '../models';
 
@@ -111,18 +113,52 @@ export default class DefaultMap extends Component {
         }
     }
 
-    componentDidMount() {
-        StatusBar.setHidden(true);
-        for (let i = 0; i < 50; i++) {
+
+    async loadAllPins() {
+        //await DataStore.clear();
+        // const models = await DataStore.observeQuery(Pin);
+        // console.log(models);
+        
+        const models = await DataStore.query(Pin);
+        console.log(models);
+
+        for (var i = 0; i < models.length; i++) {
+            var current_pin = models[i];
+            console.log(current_pin["title"]);
+
+            // await Storage.get(current_pin["image_uri"], { 
+            //     level: 'public'
+            // });
             this.state.pins.push({
                 coordinate: {
-                    latitude: Math.random() * (0.1) + 33.727187,
-                    longitude: Math.random() * (0.1) + -84.372187,
+                    latitude: current_pin["coordinates"][0],
+                    longitude: current_pin["coordinates"][1],
                 },
-            })
-        }
+                title: current_pin["title"],
+                description: current_pin["description"],
+                image: current_pin["image_uri"],
+            });
+
+        }        
+
+    }
+
+
+
+    componentDidMount() {
+        StatusBar.setHidden(true);
+        this.loadAllPins();
+        // for (let i = 0; i < 50; i++) {
+        //     this.state.pins.push({
+        //         coordinate: {
+        //             latitude: Math.random() * (0.1) + 33.727187,
+        //             longitude: Math.random() * (0.1) + -84.372187,
+        //         },
+        //     })
+        // }
         this._getLocationAsync();
         // this.setLevel();
+        
     }
 
     setLevel = () => {
@@ -333,52 +369,52 @@ export default class DefaultMap extends Component {
         return pinList;
     }
 
-    drawGrid = () => {
-        var lineList = [];
-        // console.log(JSON.stringify(this.state.grid))
-        const gridMin = this.state.grid.gridMin;
-        const gridMax = this.state.grid.gridMax;
-        const multiplier = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
-        for (var i = gridMin.latitude; i <= gridMax.latitude; i++) {
-            const realLat = i * multiplier[this.state.grid.level];
-            lineList.push(
-                <Polyline
-                    coordinates={[
-                        {
-                            latitude: realLat,
-                            longitude: this.state.mapRegion.longitude - this.state.mapRegion.longitudeDelta / 2
-                        },
-                        {
-                            latitude: realLat,
-                            longitude: this.state.mapRegion.longitude + this.state.mapRegion.longitudeDelta / 2
-                        },
-                    ]}
-                />
-            );
-        }
-        for (var i = gridMin.longitude; i <= gridMax.longitude; i++) {
-            const realLong = i * multiplier[this.state.grid.level];
-            lineList.push(
-                <Polyline
-                    coordinates={[
-                        {
-                            latitude: this.state.mapRegion.latitude - this.state.mapRegion.latitudeDelta / 2,
-                            longitude: realLong,
-                        },
-                        {
-                            latitude: this.state.mapRegion.latitude + this.state.mapRegion.latitudeDelta / 2,
-                            longitude: realLong,
-                        },
-                    ]}
-                />
-            );
-        }
-        return (
-            <React.Fragment>
-                {lineList}
-            </React.Fragment>
-        );
-    };
+    // drawGrid = () => {
+    //     var lineList = [];
+    //     // console.log(JSON.stringify(this.state.grid))
+    //     const gridMin = this.state.grid.gridMin;
+    //     const gridMax = this.state.grid.gridMax;
+    //     const multiplier = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
+    //     for (var i = gridMin.latitude; i <= gridMax.latitude; i++) {
+    //         const realLat = i * multiplier[this.state.grid.level];
+    //         lineList.push(
+    //             <Polyline
+    //                 coordinates={[
+    //                     {
+    //                         latitude: realLat,
+    //                         longitude: this.state.mapRegion.longitude - this.state.mapRegion.longitudeDelta / 2
+    //                     },
+    //                     {
+    //                         latitude: realLat,
+    //                         longitude: this.state.mapRegion.longitude + this.state.mapRegion.longitudeDelta / 2
+    //                     },
+    //                 ]}
+    //             />
+    //         );
+    //     }
+    //     for (var i = gridMin.longitude; i <= gridMax.longitude; i++) {
+    //         const realLong = i * multiplier[this.state.grid.level];
+    //         lineList.push(
+    //             <Polyline
+    //                 coordinates={[
+    //                     {
+    //                         latitude: this.state.mapRegion.latitude - this.state.mapRegion.latitudeDelta / 2,
+    //                         longitude: realLong,
+    //                     },
+    //                     {
+    //                         latitude: this.state.mapRegion.latitude + this.state.mapRegion.latitudeDelta / 2,
+    //                         longitude: realLong,
+    //                     },
+    //                 ]}
+    //             />
+    //         );
+    //     }
+    //     return (
+    //         <React.Fragment>
+    //             {lineList}
+    //         </React.Fragment>
+    //     );
+    // };
 
     animatetoCL(){
         let r={
