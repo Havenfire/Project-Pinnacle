@@ -116,13 +116,10 @@ export default class DefaultMap extends Component {
 
 
     async loadAllPins() {
-        //await DataStore.clear();
-        // const models = await DataStore.observeQuery(Pin);
-        // console.log(models);
-        
+       // await DataStore.clear(); ONLY run if there is local pins still, this clears out non database pins.
         const models = await DataStore.query(Pin);
         console.log(models);
-
+        
         for (var i = 0; i < models.length; i++) {
             var current_pin = models[i];
             console.log(current_pin["title"]);
@@ -191,6 +188,7 @@ export default class DefaultMap extends Component {
         this.setLevel();
     };
 
+    //here
     _getLocationAsync = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
@@ -220,6 +218,7 @@ export default class DefaultMap extends Component {
         this.setState({ tempTitle: description });
         this.setState({ showDialog: false });
         this.addPin(
+            //test
             this.state.location.coords,
             this.state.tempTitle,
             this.state.tempDescription,
