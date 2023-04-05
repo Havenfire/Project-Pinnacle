@@ -124,9 +124,9 @@ export default class DefaultMap extends Component {
             var current_pin = models[i];
             console.log(current_pin["title"]);
 
-            // await Storage.get(current_pin["image_uri"], { 
-            //     level: 'public'
-            // });
+            var img_from_storage = await Storage.get(current_pin["image_uri"], { 
+                level: 'public'
+            });
             this.state.pins.push({
                 coordinate: {
                     latitude: current_pin["coordinates"][0],
@@ -134,7 +134,7 @@ export default class DefaultMap extends Component {
                 },
                 title: current_pin["title"],
                 description: current_pin["description"],
-                image: current_pin["image_uri"],
+                image: img_from_storage,
             });
 
         }        
