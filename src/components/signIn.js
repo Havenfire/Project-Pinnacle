@@ -129,7 +129,7 @@ export default class SignInPage extends Component {
 
                             {/* Forget Password Text */}
                             <View style={styles.textContainer}>
-                                <Pressable onPress={() => { this.props.navigation.navigate('ForgetPasswd') }}>
+                                <Pressable onPress={() => { this.props.navigation.navigate('ForgetPasswdBuffer') }}>
                                     <Text style={styles.textForget}>Forgot Password?</Text>
                                 </Pressable>
                             </View>

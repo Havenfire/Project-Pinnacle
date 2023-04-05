@@ -8,7 +8,9 @@ import Profile from "./src/components/profile";
 import GoogleAuth from "./src/components/googleAuth";
 import ForgetPasswdPage from "./src/components/forgetPasswd";
 import ConfirmationCodeScreen from "./src/components/ConfirmationCodeScreen";
+import ForgetPasswdBufferPage from "./src/components/forgetPasswdBuffer";
 import { Amplify } from 'aws-amplify';
+
 // import {withAuthenticator} from 'aws-amplify-react-native';
 import awsconfig from './src/aws-exports';
 
@@ -26,6 +28,7 @@ export default function App() {
                 <Stack.Screen name="SignIn" component={SignInPage} />
                 <Stack.Screen name="SignUp" component={SignUpPage} />
                 <Stack.Screen name="ForgetPasswd" component={ForgetPasswdPage} />
+                <Stack.Screen name="ForgetPasswdBuffer" component={ForgetPasswdBufferPage} />
                 <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
                 <Stack.Screen name="Profile" component={Profile} />
                 <Stack.Screen name="ConfirmationCodeScreen" component={ConfirmationCodeScreen} />

@@ -14,7 +14,7 @@ import { useRoute } from "@react-navigation/native";
 const ConfirmationCodeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const username = route.params.user.user.username
+  const username = route.params.user.user.username;
   const [code, setCode] = React.useState('');
 
   async function confirmSignUp() {
