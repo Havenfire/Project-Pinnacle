@@ -39,11 +39,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "image": {
-                    "name": "image",
+                "image_uri": {
+                    "name": "image_uri",
                     "isArray": false,
-                    "type": "AWSURL",
-                    "isRequired": true,
+                    "type": "String",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -92,5 +92,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "2b138eef56cdc2e88b51a3b333f77570"
+    "version": "551ad589dc62a9411b3ab2c5c4263dc0"
 };

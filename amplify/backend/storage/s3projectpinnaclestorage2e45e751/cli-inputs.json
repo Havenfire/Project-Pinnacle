@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3projectpinnaclestorage2e45e751",
+  "bucketName": "projectpinnacle-storage-2e45e751",
+  "policyUUID": "f9ad5ca4",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

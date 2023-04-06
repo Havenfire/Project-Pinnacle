@@ -16,7 +16,8 @@
         "ProjectPinnacle": {}
       },
       "storage": {
-        "s3projectpinnaclestoragepins": {}
+        "s3projectpinnaclestoragepins": {},
+        "s3projectpinnaclestorage2e45e751": {}
       }
     }
   },

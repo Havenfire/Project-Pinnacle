@@ -1,6 +1,6 @@
 /* fonts */
 export const FontFamily = {
-  montserratRegular: "Montserrat_regular",
+  montserratRegular: "Montserrat",
   montserratExtrabold: "Montserrat_extrabold",
   montserratLight: "Montserrat_light",
   montserratBold: "Montserrat_bold",
@@ -38,6 +38,7 @@ export const Padding = {
   p_8xs: 5,
   p_xl: 20,
   p_11xl: 30,
+  p_sm: 14,
 };
 /* Margins */
 export const Margin = {
