@@ -41,10 +41,13 @@ export default class DefaultMap extends Component {
                 },
             },
             pins: [],
-            showDialog: false,
+            showAddPinDialog: false,
+            showConfirmPinDialog: false,
             tempTitle: null,
             tempDescription: null,
             tempCoordinate: null,
+            tempPinCoordinate: null,
+            tempImage: null,
             photo: null,
             theme: mapStyle,
         };
@@ -79,7 +82,6 @@ export default class DefaultMap extends Component {
             if (!dummy) {
                 const filename = `${coordinate.latitude}_${coordinate.longitude}.jpeg`;
                 this.uploadImageToS3(filename, image);
-
 
                 await DataStore.save(
                     new Pin({
@@ -170,7 +172,7 @@ export default class DefaultMap extends Component {
         this.setState({ photo: camera.state.photo });
 
         if (this.state.photo) {
-            this.setState({ showDialog: true });
+            this.setState({ showAddPinDialog: true });
         }
     };
 
@@ -179,11 +181,11 @@ export default class DefaultMap extends Component {
             Alert.alert("Please enter a title");
             return;
         } else {
-            this.onPressDismissDialog();
+            this.dismissAddPinDialog();
         }
         this.setState({ tempTitle: title });
         this.setState({ tempTitle: description });
-        this.setState({ showDialog: false });
+        this.setState({ showAddPinDialog: false });
         this.addPin(
             //test
             this.state.location.coords,
@@ -199,12 +201,12 @@ export default class DefaultMap extends Component {
         });
     };
 
-    onPressShowDialog = () => {
-        this.setState({ showDialog: true });
+    dismissAddPinDialog = () => {
+        this.setState({ showAddPinDialog: false });
     };
 
-    onPressDismissDialog = () => {
-        this.setState({ showDialog: false });
+    dismissConfirmPinDialog = () => {
+        this.setState({ showConfirmPinDialog: false });
     };
 
     getButtonColor = () => {
@@ -234,6 +236,34 @@ export default class DefaultMap extends Component {
         return (angle * Math.PI) / 180;
     };
 
+    deleteDummyPin = (coord) => {
+        const dummyPinIndex = this.state.pins.findIndex((dummy) => {
+            return (
+                Math.abs(dummy.coordinate.latitude - coord.latitude) < 1e-9 &&
+                Math.abs(dummy.coordinate.longitude - coord.longitude) < 1e-9
+            );
+        });
+        if (dummyPinIndex > -1) {
+            this.state.pins.splice(dummyPinIndex, 1);
+        }
+        this.forceUpdate();
+    }
+
+    confirmAddPin = (confirmed) => {
+        if (confirmed) {
+            this.addPin(
+                this.state.tempCoordinate,
+                this.state.tempTitle,
+                this.state.tempDescription,
+                this.state.tempImage,
+                false
+            );
+            this.deleteDummyPin(this.state.tempPinCoordinate);
+        }
+        console.log(JSON.stringify(this.state.pins));
+        this.dismissConfirmPinDialog();
+    };
+
     drawDummyPin = () => {
         let pin = this.state.dummyPin;
         return (
@@ -245,27 +275,17 @@ export default class DefaultMap extends Component {
                     draggable={true}
                     onDragEnd={(e) => {
                         const distance = this.calculateDistance(pin.coordinate, e.nativeEvent.coordinate);
-
                         if (distance >= 100) {
                             alert("The pin must stay within the red circle.");
                         } else {
-                            const dummyPinIndex = this.state.pins.findIndex((dummy) => {
-                                return (
-                                    Math.abs(dummy.coordinate.latitude - pin.coordinate.latitude) < 1e-7 &&
-                                    Math.abs(dummy.coordinate.longitude - pin.coordinate.longitude) < 1e-7
-                                );
+                            this.setState({
+                                showConfirmPinDialog: true,
+                                tempCoordinate: e.nativeEvent.coordinate,
+                                tempTitle: pin.title,
+                                tempDescription: pin.description,
+                                tempImage: pin.image,
+                                tempPinCoordinate: pin.coordinate,
                             });
-                            this.addPin(
-                                e.nativeEvent.coordinate,
-                                pin.title,
-                                pin.description,
-                                pin.image,
-                                false
-                            );
-                            if (dummyPinIndex > -1) {
-                                this.state.pins.splice(dummyPinIndex, 1);
-                            }
-                            this.forceUpdate();
                         }
                     }}>
                     <Callout>
@@ -288,7 +308,7 @@ export default class DefaultMap extends Component {
                     strokeColor={"rgba(255, 0, 0, 0.5)"}
                     strokeWidth={2}
                 />
-            </React.Fragment>
+            </React.Fragment >
         )
     }
 
@@ -316,7 +336,6 @@ export default class DefaultMap extends Component {
                         </Callout>
                     ) : null}
                 </Marker>
-
             )
         }
         return pinList;
@@ -355,7 +374,7 @@ export default class DefaultMap extends Component {
                     }}
                     radius={Dimensions.get('window').width * 0.1}
                     onRegionChange={this._handleMapRegionChange}
-                    onMarkerPress={() => this.setState({ showDialog: false })}>
+                    onMarkerPress={() => this.setState({ showAddPinDialog: false })}>
                     {this.state.dummyPin ? this.drawDummyPin() : null}
                     {this.state.pins ? this.drawPins() : null}
                 </MapView>
@@ -369,7 +388,7 @@ export default class DefaultMap extends Component {
                     />
                     <Pressable // hamburger menu button
                         style={[styles.iconMenu, styles.ml16]}
-                        onPress={() => {this.props.navigation.navigate("DrawerMenu")}}
+                        onPress={() => { this.props.navigation.navigate("DrawerMenu") }}
                     >
                         <Image
                             style={styles.icon}
@@ -419,7 +438,8 @@ export default class DefaultMap extends Component {
                     </TouchableOpacity>
                 </View>
 
-                <DialogModal isVisible={this.state.showDialog}>
+                {/* add pin dialog */}
+                <DialogModal isVisible={this.state.showAddPinDialog}>
                     <DialogModal.Container style={styles.dialog}>
                         <View>
                             <DialogModal.Header title="Create a Pin" />
@@ -446,15 +466,38 @@ export default class DefaultMap extends Component {
                                     placeholderTextColor={Color.lightButtonText}
                                     keyboardType="default"
                                     autoCapitalize="none"
-                                    onChangeText={(description) => this.setState({ tempTitle: description })}
+                                    onChangeText={(description) => this.setState({ tempDescription: description })}
                                 />
                             </DialogModal.Body>
                             <DialogModal.Footer>
                                 <View style={styles.dialogButtonContainer}>
-                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={this.onPressDismissDialog}>
+                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={this.dismissAddPinDialog}>
                                         <Text style={styles.dialogButtonText}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonConfirm]} onPress={this.handleDialogueInputs}>
+                                        <Text style={styles.dialogButtonText}>OK</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </DialogModal.Footer>
+                        </View>
+                    </DialogModal.Container>
+                </DialogModal>
+
+                {/* confirm dialog */}
+                <DialogModal isVisible={this.state.showConfirmPinDialog}>
+                    <DialogModal.Container style={styles.dialog}>
+                        <View>
+                            <DialogModal.Header title="Confirm Location" />
+                            <DialogModal.Footer>
+                                <View style={styles.dialogButtonContainer}>
+                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={() => {
+                                        this.confirmAddPin(false);
+                                    }}>
+                                        <Text style={styles.dialogButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonConfirm]} onPress={() => {
+                                        this.confirmAddPin(true);
+                                    }}>
                                         <Text style={styles.dialogButtonText}>OK</Text>
                                     </TouchableOpacity>
                                 </View>
