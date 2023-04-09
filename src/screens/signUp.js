@@ -3,7 +3,6 @@ import { Text, StyleSheet, TextInput, Pressable, TouchableOpacity, View, Image, 
 import { Checkbox } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import TOSModal from "../components/TOSModal";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 import { Auth } from "aws-amplify";
 

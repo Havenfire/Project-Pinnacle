@@ -201,10 +201,6 @@ const styles = StyleSheet.create({
         color: Color.lightButtonText,
         fontSize: FontSize.size_base,
     },
-    buttonText: {
-        color: Color.gray_200,
-        textAlign: "center",
-    },
     signInWithButton: {
         backgroundColor: Color.lightText,
         height: 60,

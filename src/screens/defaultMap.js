@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, Image, ScrollView, TouchableOpacity, Dimensions, Alert } from "react-native";
 import Constants from 'expo-constants';
 import * as Location from "expo-location";
 import { Callout, Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
@@ -13,12 +13,13 @@ import mapStyle from "../themes/mapStyle.json";
 
 // import { LinearGradient } from "expo-linear-gradient";
 // import { useNavigation } from "@react-navigation/native";
-import { Border, Padding } from "../GlobalStyles";
+import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 
 import { Storage } from "@aws-amplify/storage"
 
 import { DataStore } from '@aws-amplify/datastore';
 import { Pin } from '../models';
+import { DialogModal } from "../components/DialogModal";
 
 const statusBarHeight = Constants.statusBarHeight;
 export default class DefaultMap extends Component {
@@ -51,7 +52,7 @@ export default class DefaultMap extends Component {
     }
 
     async addPin(coordinate, title, description, image, dummy) {
-        if (coordinate && title && description) {
+        if (coordinate && title) {
             if (dummy) {
                 this.state.dummyPin = ({
                     coordinate: {
@@ -59,7 +60,7 @@ export default class DefaultMap extends Component {
                         longitude: coordinate.longitude,
                     },
                     title: title,
-                    description: description,
+                    description: description ? description : undefined,
                     image: image ? image : undefined,
                 });
             } else {
@@ -70,7 +71,7 @@ export default class DefaultMap extends Component {
                         longitude: coordinate.longitude,
                     },
                     title: title,
-                    description: description,
+                    description: description ? description : undefined,
                     image: image ? image : undefined,
                 });
             }
@@ -174,6 +175,12 @@ export default class DefaultMap extends Component {
     };
 
     handleDialogueInputs = (title, description) => {
+        if (!title) {
+            Alert.alert("Please enter a title");
+            return;
+        } else {
+            this.onPressDismissDialog();
+        }
         this.setState({ tempTitle: title });
         this.setState({ tempTitle: description });
         this.setState({ showDialog: false });
@@ -202,9 +209,9 @@ export default class DefaultMap extends Component {
 
     getButtonColor = () => {
         if (this.state.theme == mapStyle) {
-            return "#241C1CCC";
+            return "#1C1C1CCC";
         } else {
-            return "#F5F4F2CC";
+            return "#F4F4F4CC";
         }
     };
 
@@ -412,16 +419,49 @@ export default class DefaultMap extends Component {
                     </TouchableOpacity>
                 </View>
 
-                <Dialog.Container visible={this.state.showDialog}>
-                    <Dialog.Title>Create a Pin</Dialog.Title>
-                    <Dialog.Input label="Title" onChangeText={(title) => this.setState({ tempTitle: title })} />
-                    <Dialog.Input
-                        label="Description"
-                        onChangeText={(description) => this.setState({ tempDescription: description })}
-                    />
-                    <Dialog.Button label="Cancel" onPress={this.onPressDismissDialog} />
-                    <Dialog.Button label="OK" onPress={this.handleDialogueInputs} />
-                </Dialog.Container>
+                <DialogModal isVisible={this.state.showDialog}>
+                    <DialogModal.Container style={styles.dialog}>
+                        <View>
+                            <DialogModal.Header title="Create a Pin" />
+                            <DialogModal.Body>
+                                <Text style={styles.dialogTitleText}>
+                                    Title
+                                </Text>
+                                <TextInput
+                                    style={[styles.dialogTextInput, styles.dialogBodyText]}
+                                    placeholder="Title"
+                                    placeholderTextColor={Color.lightButtonText}
+                                    keyboardType="default"
+                                    autoCapitalize="none"
+                                    onChangeText={(title) => this.setState({ tempTitle: title })}
+                                />
+                            </DialogModal.Body>
+                            <DialogModal.Body>
+                                <Text style={styles.dialogTitleText}>
+                                    Description
+                                </Text>
+                                <TextInput
+                                    style={[styles.dialogTextInput, styles.dialogBodyText]}
+                                    placeholder="Description (optional)"
+                                    placeholderTextColor={Color.lightButtonText}
+                                    keyboardType="default"
+                                    autoCapitalize="none"
+                                    onChangeText={(description) => this.setState({ tempTitle: description })}
+                                />
+                            </DialogModal.Body>
+                            <DialogModal.Footer>
+                                <View style={styles.dialogButtonContainer}>
+                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={this.onPressDismissDialog}>
+                                        <Text style={styles.dialogButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonConfirm]} onPress={this.handleDialogueInputs}>
+                                        <Text style={styles.dialogButtonText}>OK</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </DialogModal.Footer>
+                        </View>
+                    </DialogModal.Container>
+                </DialogModal>
             </View>
         );
     }
@@ -516,5 +556,49 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         flex: 1,
+    },
+
+    dialog: {
+        width: "90%",
+        height: "80%",
+        alignItems: "center",
+        justifyContent: "space-evenly",
+    },
+    dialogTitleText: {
+        fontFamily: FontFamily.montserratSemibold,
+        fontSize: 18,
+        color: Color.lightText,
+    },
+    dialogBodyText: {
+        fontFamily: FontFamily.montserratRegular,
+        fontSize: 16,
+        color: Color.lightText,
+    },
+    dialogTextInput: {
+        paddingTop: 10,
+        borderColor: Color.lightButtonText,
+        borderBottomWidth: 2,
+    },
+    dialogButtonContainer: {
+        flexDirection: "row",
+        flex: 1,
+        justifyContent: "space-around",
+    },
+    dialogButton: {
+        paddingVertical: 10,
+        borderRadius: 25,
+        width: "35%",
+        alignItems: "center",
+    },
+    dialogButtonConfirm: {
+        backgroundColor: Color.teal,
+    },
+    dialogButtonCancel: {
+        backgroundColor: Color.orange,
+    },
+    dialogButtonText: {
+        color: Color.lightText,
+        fontFamily: FontFamily.montserratSemibold,
+        fontSize: 18,
     },
 });

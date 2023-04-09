@@ -22,12 +22,11 @@ export const FontSize = {
 export const Color = {
   black: "#000",
   white: "#fff",
-  darkButton: "rgba(36, 28, 28, 0.25)",
-  gray_200: "rgba(36, 28, 28, 0.6)",
+  orange: "#fbbc05",
   teal: "#2c847f",
   lightText: "#f5f4f2",
   lightButton: "rgba(245, 244, 242, 0.5)",
-  orange: "#fbbc05",
+  darkButton: "rgba(36, 28, 28, 0.25)",
 };
 /* Paddings */
 export const Padding = {
