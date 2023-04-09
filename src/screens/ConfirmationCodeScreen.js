@@ -21,7 +21,7 @@ const ConfirmationCodeScreen = () => {
   const [code, setCode] = React.useState('');
 
   async function confirmSignUp() {
-    try { 
+    try {
       await Auth.confirmSignUp(username, code);
       navigation.navigate("DefaultMap");
     } catch (error) {
@@ -31,22 +31,22 @@ const ConfirmationCodeScreen = () => {
 
   async function resendConfirmationCode() {
     try {
-        await Auth.resendSignUp(username);
-        console.log('code resent successfully');
+      await Auth.resendSignUp(username);
+      console.log('code resent successfully');
     } catch (err) {
-        console.log('error resending code: ', err);
+      console.log('error resending code: ', err);
     }
-}
+  }
 
   return (
     <View style={[styles.confirmationCodeScreen, styles.buttonSolidFlexBox]}>
       <View style={styles.pleaseEnterTheConfirmationWrapper}>
         <Text style={styles.pleaseEnterThe}>
           Please enter the confirmation code sent to your email
-          
+
         </Text>
       </View>
-      
+
       <TextInput
         style={[styles.confirmationCodeScreenChild, styles.mt44]}
         placeholder="000000"
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
     fontWeight: "800",
     fontFamily: FontFamily.montserratExtrabold,
-    color: Color.whitesmoke_100,
+    color: Color.lightButtonText,
     textAlign: "left",
   },
   buttonSolid: {

@@ -2,18 +2,18 @@ import React, { Component } from "react";
 import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import Constants from 'expo-constants';
 import * as Location from "expo-location";
-import { Callout, Marker, PROVIDER_GOOGLE, Circle, Polyline } from "react-native-maps";
+import { Callout, Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from "react-native-svg";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+// import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import mapStyle from "../themes/mapStyle.json";
-import mapStyleDark from "../themes/mapStyleDark.json";
+// import mapStyleDark from "../themes/mapStyleDark.json";
 
-import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
-import { Border, Color, Padding } from "../GlobalStyles";
+// import { LinearGradient } from "expo-linear-gradient";
+// import { useNavigation } from "@react-navigation/native";
+import { Border, Padding } from "../GlobalStyles";
 
 import { Storage } from "@aws-amplify/storage"
 
@@ -61,7 +61,6 @@ export default class DefaultMap extends Component {
                     title: title,
                     description: description,
                     image: image ? image : undefined,
-                    // grid: this.getAbsolutePinGrid(coordinate),
                 });
             } else {
                 delete this.state.dummyPin;
@@ -73,7 +72,6 @@ export default class DefaultMap extends Component {
                     title: title,
                     description: description,
                     image: image ? image : undefined,
-                    // grid: this.getAbsolutePinGrid(coordinate),
                 });
             }
 
@@ -116,15 +114,15 @@ export default class DefaultMap extends Component {
 
 
     async loadAllPins() {
-       // await DataStore.clear(); ONLY run if there is local pins still, this clears out non database pins.
+        // await DataStore.clear(); ONLY run if there is local pins still, this clears out non database pins.
         const models = await DataStore.query(Pin);
         console.log(models);
-        
+
         for (var i = 0; i < models.length; i++) {
             var current_pin = models[i];
             console.log(current_pin["title"]);
 
-            var img_from_storage = await Storage.get(current_pin["image_uri"], { 
+            var img_from_storage = await Storage.get(current_pin["image_uri"], {
                 level: 'public'
             });
             this.state.pins.push({
@@ -136,56 +134,18 @@ export default class DefaultMap extends Component {
                 description: current_pin["description"],
                 image: img_from_storage,
             });
-
-        }        
-
+        }
     }
-
 
 
     componentDidMount() {
         StatusBar.setHidden(true);
         this.loadAllPins();
-        // for (let i = 0; i < 50; i++) {
-        //     this.state.pins.push({
-        //         coordinate: {
-        //             latitude: Math.random() * (0.1) + 33.727187,
-        //             longitude: Math.random() * (0.1) + -84.372187,
-        //         },
-        //     })
-        // }
         this._getLocationAsync();
-        // this.setLevel();
-        
-    }
-
-    setLevel = () => {
-        const region = this.state.mapRegion;
-        const delta = Math.max(
-            region.latitudeDelta,
-            region.longitudeDelta
-        );
-        const levels = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
-        const multiplier = [1 / 30, 0.1, 1, 6, 60, 360, 3600];
-        for (var i = levels.length - 1; i >= 0; i--) {
-            if (delta / 10 < levels[i]) {
-                const gridMin = {
-                    latitude: Math.floor((region.latitude - region.latitudeDelta / 2) * multiplier[i]),
-                    longitude: Math.floor((region.longitude - region.longitudeDelta / 2) * multiplier[i])
-                };
-                const gridMax = {
-                    latitude: Math.floor((region.latitude + region.latitudeDelta / 2) * multiplier[i]),
-                    longitude: Math.floor((region.longitude + region.longitudeDelta / 2) * multiplier[i])
-                };
-                this.state.grid = { level: i, gridMin: gridMin, gridMax: gridMax };
-                break;
-            }
-        }
     }
 
     _handleMapRegionChange = (mapRegion) => {
         this.setState({ mapRegion });
-        this.setLevel();
     };
 
     //here
@@ -247,20 +207,6 @@ export default class DefaultMap extends Component {
             return "#F5F4F2CC";
         }
     };
-
-    getAbsolutePinGrid = (coord) => {
-        const lat = coord.latitude + 90;
-        const long = coord.longitude + 180;
-        const multiplier = [1 / 30, 0.1, 1, 6, 60, 360, 3600];
-        var gridCoord = [];
-        for (var i = 0; i < multiplier.length; i++) {
-            gridCoord.push({
-                latitude: Math.floor(lat * multiplier[i]),
-                longitude: Math.floor(long * multiplier[i])
-            });
-        }
-        return gridCoord;
-    }
 
     calculateDistance = (coordinate1, coordinate2) => {
         const earthRadius = 6378137; // in meters
@@ -369,52 +315,6 @@ export default class DefaultMap extends Component {
         return pinList;
     }
 
-    // drawGrid = () => {
-    //     var lineList = [];
-    //     // console.log(JSON.stringify(this.state.grid))
-    //     const gridMin = this.state.grid.gridMin;
-    //     const gridMax = this.state.grid.gridMax;
-    //     const multiplier = [30, 10, 1, 1 / 6, 1 / 60, 1 / 360, 1 / 3600];
-    //     for (var i = gridMin.latitude; i <= gridMax.latitude; i++) {
-    //         const realLat = i * multiplier[this.state.grid.level];
-    //         lineList.push(
-    //             <Polyline
-    //                 coordinates={[
-    //                     {
-    //                         latitude: realLat,
-    //                         longitude: this.state.mapRegion.longitude - this.state.mapRegion.longitudeDelta / 2
-    //                     },
-    //                     {
-    //                         latitude: realLat,
-    //                         longitude: this.state.mapRegion.longitude + this.state.mapRegion.longitudeDelta / 2
-    //                     },
-    //                 ]}
-    //             />
-    //         );
-    //     }
-    //     for (var i = gridMin.longitude; i <= gridMax.longitude; i++) {
-    //         const realLong = i * multiplier[this.state.grid.level];
-    //         lineList.push(
-    //             <Polyline
-    //                 coordinates={[
-    //                     {
-    //                         latitude: this.state.mapRegion.latitude - this.state.mapRegion.latitudeDelta / 2,
-    //                         longitude: realLong,
-    //                     },
-    //                     {
-    //                         latitude: this.state.mapRegion.latitude + this.state.mapRegion.latitudeDelta / 2,
-    //                         longitude: realLong,
-    //                     },
-    //                 ]}
-    //             />
-    //         );
-    //     }
-    //     return (
-    //         <React.Fragment>
-    //             {lineList}
-    //         </React.Fragment>
-    //     );
-    // };
 
     animatetoCL() {
         let r = {
@@ -451,7 +351,6 @@ export default class DefaultMap extends Component {
                     onMarkerPress={() => this.setState({ showDialog: false })}>
                     {this.state.dummyPin ? this.drawDummyPin() : null}
                     {this.state.pins ? this.drawPins() : null}
-                    {/* {this.state.grid ? (this.drawGrid()) : null} */}
                 </MapView>
 
                 <View style={[styles.titleBar, styles.parentFlexBox, styles.parentFlexBox1]}>
@@ -461,7 +360,7 @@ export default class DefaultMap extends Component {
                         keyboardType="default"
                         placeholderTextColor="rgba(255, 255, 255, 0.8)"
                     />
-                    <Pressable // hamburger menu button
+                    {/* <Pressable // hamburger menu button
                         style={[styles.iconMenu, styles.ml16]}
                         onPress={() => this.props.navigation.toggleDrawer()}
                     >
@@ -470,7 +369,7 @@ export default class DefaultMap extends Component {
                             resizeMode="cover"
                             source={require("../assets/-icon-menu-dark.png")}
                         />
-                    </Pressable>
+                    </Pressable> */}
                 </View>
                 <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1,]}>
                     <TouchableOpacity // saved pins heart button

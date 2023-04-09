@@ -1,13 +1,15 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignInPage from "./src/components/signIn";
-import SignUpPage from "./src/components/signUp";
-import DefaultMap from "./src/components/defaultMap";
-import Profile from "./src/components/profile";
-import GoogleAuth from "./src/components/googleAuth";
-import ForgetPasswdPage from "./src/components/forgetPasswd";
-import ConfirmationCodeScreen from "./src/components/ConfirmationCodeScreen";
+import { useFonts } from "expo-font";
+import SignInPage from "./src/screens/signIn";
+import SignUpPage from "./src/screens/signUp";
+import DefaultMap from "./src/screens/defaultMap";
+import Profile from "./src/screens/profile";
+import GoogleAuth from "./src/screens/googleAuth";
+import ChangePasswdPage from "./src/screens/forgetPasswd";
+import ForgetPasswdBufferPage from "./src/screens/forgetPasswdBuffer";
+import ConfirmationCodeScreen from "./src/screens/ConfirmationCodeScreen";
 import { Amplify } from 'aws-amplify';
 
 // import {withAuthenticator} from 'aws-amplify-react-native';
@@ -47,7 +49,7 @@ export default function App() {
                 }}>
                 <Stack.Screen name="SignIn" component={SignInPage} />
                 <Stack.Screen name="SignUp" component={SignUpPage} />
-                <Stack.Screen name="ForgetPasswd" component={ForgetPasswdPage} />
+                <Stack.Screen name="ForgetPasswd" component={ChangePasswdPage} />
                 <Stack.Screen name="ForgetPasswdBuffer" component={ForgetPasswdBufferPage} />
                 <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
                 <Stack.Screen name="Profile" component={Profile} />

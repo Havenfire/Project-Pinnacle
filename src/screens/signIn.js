@@ -52,10 +52,10 @@ export default class SignInPage extends Component {
                         styles.usernameemailForm,
                         styles.signInButtonFlexBox,
                     ]}
-                    placeholder="Username/Email"
+                    placeholder="Username"
                     keyboardType="default"
                     autoCapitalize="none"
-                    placeholderTextColor="#f5f4f2"
+                    placeholderTextColor={Color.lightButtonText}
                     returnKeyType="next"
                     onChangeText={(text) => this.setState({ username: text })}
                     value={this.state.username}
@@ -68,14 +68,13 @@ export default class SignInPage extends Component {
                     placeholder="Password"
                     keyboardType="default"
                     secureTextEntry
-                    placeholderTextColor="#f5f4f2"
+                    placeholderTextColor={Color.lightButtonText}
                     onChangeText={(text) => this.setState({ password: text })}
                     value={this.state.password}
                 />
                 <TouchableOpacity
                     style={[styles.signInButton, styles.mt16, styles.signInButtonFlexBox]}
                     activeOpacity={0.2}
-                    // onPress={() => navigation.navigate("HomePageOverlay")}
                     onPress={async () => {
                         this.setState({ isLoading: true });
                         try {
@@ -115,7 +114,7 @@ export default class SignInPage extends Component {
                         <TouchableOpacity
                             style={[styles.forgotPasswordButton, styles.mt10]}
                             activeOpacity={0.2}
-                            onPress={() => { this.props.navigation.navigate('ForgetPasswd') }}
+                            onPress={() => { this.props.navigation.navigate('ForgetPasswdBuffer') }}
                         >
                             <Text style={[styles.forgotPasswordText]}>
                                 Forgot Password?
@@ -153,18 +152,19 @@ const styles = StyleSheet.create({
     welcome: {
         fontSize: FontSize.size_19xl,
         textAlign: "center",
-        color: Color.whitesmoke_100,
+        color: Color.lightText,
         fontFamily: FontFamily.montserratExtrabold,
     },
     usernameemailForm: {
-        backgroundColor: Color.gray_100,
+        backgroundColor: Color.darkButton,
         height: 60,
         paddingVertical: Padding.p_xl,
+        color: Color.lightButtonText,
     },
     signInText: {
         fontSize: FontSize.size_base,
         textAlign: "center",
-        color: Color.whitesmoke_100,
+        color: Color.lightText,
         fontFamily: FontFamily.montserratExtrabold,
     },
     signInButton: {
@@ -198,25 +198,20 @@ const styles = StyleSheet.create({
     or: {
         fontFamily: FontFamily.montserratLight,
         textAlign: "center",
-        color: Color.whitesmoke_100,
+        color: Color.lightButtonText,
         fontSize: FontSize.size_base,
     },
-    // googleGLogo1Icon: {
-    //     width: 29,
-    //     height: 29,
-    //     overflow: "hidden",
-    // },
     buttonText: {
         color: Color.gray_200,
         textAlign: "center",
     },
     signInWithButton: {
-        backgroundColor: Color.whitesmoke_100,
+        backgroundColor: Color.lightText,
         height: 60,
     },
     createAccountText: {
         textAlign: "left",
-        color: Color.whitesmoke_100,
+        color: Color.lightText,
     },
     createAccountButton: {
         borderStyle: "solid",

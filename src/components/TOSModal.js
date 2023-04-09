@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   tosModal: {
     borderRadius: Border.br_12xl_5,
-    backgroundColor: Color.whitesmoke_100,
+    backgroundColor: Color.lightText,
     width: 360,
     padding: Padding.p_xl,
     alignItems: "center",
