@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, Image, StyleSheet, Text, View } from "react-native";
+import { Pressable, Image, StyleSheet, Text, View,SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PinButtonsScrollable from "../components/PinButtonsScrollable";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
@@ -8,7 +8,7 @@ const SavedPinsScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.savedPinsScreen}>
+    <SafeAreaView style={styles.savedPinsScreen}>
       <View style={styles.backButtonLightParent}>
         <Pressable
           style={styles.backButtonLight}
@@ -27,7 +27,7 @@ const SavedPinsScreen = () => {
         onFramePressablePress1={() => {}}
         onFramePressablePress2={() => {}}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

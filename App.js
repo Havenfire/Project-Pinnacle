@@ -14,6 +14,16 @@ import { Amplify } from 'aws-amplify';
 
 // import {withAuthenticator} from 'aws-amplify-react-native';
 import awsconfig from './src/aws-exports';
+// import SettingsMenu from "./src/screens/SettingsMenu";
+// import YourPinsScreen from "./src/screens/YourPinsScreen";
+import SavedPinsScreen from "./src/screens/SavedPinsScreen";
+// import AdjustPinLocationOverlay from "./src/screens/AdjustPinLocationOverlay";
+// import EditPinScreen from "./src/screens/EditPinScreen";
+// import CameraOverlay from "./src/screens/CameraOverlay";
+import DrawerMenu from "./src/screens/DrawerMenu";
+// import HomePageOverlay from "./src/screens/HomePageOverlay";
+// import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
+import Splashscreen from "./src/screens/Splashscreen";
 
 Amplify.configure(awsconfig);
 
@@ -42,20 +52,37 @@ export default function App() {
     const Stack = createNativeStackNavigator();
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false,
-                }}>
-                <Stack.Screen name="SignIn" component={SignInPage} />
-                <Stack.Screen name="SignUp" component={SignUpPage} />
-                <Stack.Screen name="ForgetPasswd" component={ChangePasswdPage} />
-                <Stack.Screen name="ForgetPasswdBuffer" component={ForgetPasswdBufferPage} />
-                <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
-                <Stack.Screen name="Profile" component={Profile} />
-                <Stack.Screen name="ConfirmationCodeScreen" component={ConfirmationCodeScreen} />
-                <Stack.Screen name="DefaultMap" component={DefaultMap} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <>
+            <NavigationContainer>
+                {hideSplashScreen ? (
+                    <Stack.Navigator
+                        initialRouteName="SignIn"
+                        screenOptions={{ headerShown: false }}
+                    >
+                        <Stack.Screen
+                            name="SavedPinsScreen"
+                            component={SavedPinsScreen}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="DrawerMenu"
+                            component={DrawerMenu}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen name="SignIn" component={SignInPage} />
+                        <Stack.Screen name="SignUp" component={SignUpPage} />
+                        <Stack.Screen name="ForgetPasswd" component={ChangePasswdPage} />
+                        <Stack.Screen name="ForgetPasswdBuffer" component={ForgetPasswdBufferPage} />
+                        <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
+                        <Stack.Screen name="Profile" component={Profile} />
+                        <Stack.Screen name="ConfirmationCodeScreen" component={ConfirmationCodeScreen} />
+                        <Stack.Screen name="DefaultMap" component={DefaultMap} />
+                        <Stack.Screen name="Splashscreen" component={Splashscreen} options={{ headerShown: false }} />
+                    </Stack.Navigator>
+                ) : (
+                    <Splashscreen />
+                )}
+            </NavigationContainer>
+        </>
     );
-}
+};

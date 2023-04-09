@@ -367,16 +367,16 @@ export default class DefaultMap extends Component {
                         keyboardType="default"
                         placeholderTextColor="rgba(255, 255, 255, 0.8)"
                     />
-                    {/* <Pressable // hamburger menu button
+                    <Pressable // hamburger menu button
                         style={[styles.iconMenu, styles.ml16]}
-                        onPress={() => this.props.navigation.toggleDrawer()}
+                        onPress={() => {this.props.navigation.navigate("DrawerMenu")}}
                     >
                         <Image
                             style={styles.icon}
                             resizeMode="cover"
                             source={require("../assets/-icon-menu-dark.png")}
                         />
-                    </Pressable> */}
+                    </Pressable>
                 </View>
                 <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1,]}>
                     <TouchableOpacity // saved pins heart button
