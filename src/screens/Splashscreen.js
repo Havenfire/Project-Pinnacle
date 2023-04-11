@@ -2,6 +2,7 @@ import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Splashscreen = () => {
   return (
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     display: "flex",
   },
   splashscreen: {
-    backgroundColor: "transparent",
+    backgroundColor: '#5DB45B',
     width: "100%",
     height: 800,
     flexDirection: "row",
