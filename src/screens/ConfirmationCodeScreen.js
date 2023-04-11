@@ -6,7 +6,9 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
-  Alert
+  Alert,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
@@ -39,34 +41,49 @@ const ConfirmationCodeScreen = () => {
   }
 
   return (
-    <View style={[styles.confirmationCodeScreen, styles.buttonSolidFlexBox]}>
-      <View style={styles.pleaseEnterTheConfirmationWrapper}>
-        <Text style={styles.pleaseEnterThe}>
-          Please enter the confirmation code sent to your email
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
+      <View style={[styles.confirmationCodeScreen, styles.buttonSolidFlexBox]}>
+        <View style={styles.pleaseEnterTheConfirmationWrapper}>
+          <Text style={styles.pleaseEnterThe}>
+            Please enter the confirmation code sent to your email
+          </Text>
+        </View>
 
-        </Text>
+        <TextInput
+          style={[styles.confirmationCodeScreenChild, styles.mt44]}
+          placeholder="000000"
+          keyboardType="number-pad"
+          placeholderTextColor="rgba(36, 28, 28, 0.6)"
+          maxLength={6}
+          onChangeText={setCode}
+        />
+
+        <Pressable
+          style={[styles.buttonSolid, styles.mt44, styles.buttonSolidFlexBox]}
+          onPress={confirmSignUp}
+        >
+          <Text style={styles.buttonText}>LET’S GO</Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.resendCodeButton, styles.mt44, styles.buttonSolidFlexBox]}
+          onPress={resendConfirmationCode}
+        >
+          <Text style={styles.buttonText}>Resend Code</Text>
+        </Pressable>
       </View>
-
-      <TextInput
-        style={[styles.confirmationCodeScreenChild, styles.mt44]}
-        placeholder="000000"
-        keyboardType="number-pad"
-        placeholderTextColor="rgba(36, 28, 28, 0.6)"
-        maxLength={6}
-        onChangeText={setCode}
-      />
-      <TouchableOpacity
-        style={[styles.buttonSolid, styles.mt44, styles.buttonSolidFlexBox]}
-        activeOpacity={0.2}
-        onPress={confirmSignUp}
-      >
-        <Text style={styles.buttonText}>LET’S GO</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   mt44: {
     marginTop: 44,
   },
@@ -98,6 +115,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   buttonSolid: {
+
     borderRadius: Border.br_12xl_5,
     backgroundColor: Color.black,
     height: 60,
