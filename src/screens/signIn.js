@@ -1,114 +1,94 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Padding, FontFamily, FontSize, Color, Border } from "../GlobalStyles";
 import { Auth } from "aws-amplify";
 
 export default class SignInPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      usernameOrEmail: "",
-      password: "",
-      isLoading: false, // new state variable for loading indicator
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            usernameOrEmail: "",
+            password: "",
+            isLoading: false, // new state variable for loading indicator
+        };
+    }
 
-  render() {
-    return (
-      <LinearGradient
-        colors={["#5DB45B", "#B7BA44"]}
-        style={styles.signInScreen}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        {/* WelcomeCard */}
-        <Text style={[styles.welcome]}>Welcome!</Text>
-        <TextInput
-          style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
-          placeholder="Username or Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor={Color.lightButtonText}
-          returnKeyType="next"
-          onChangeText={(text) =>
-            this.setState({ usernameOrEmail: text })
-          }
-          value={this.state.usernameOrEmail}
-        />
-        <TextInput
-          style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
-          placeholder="Password"
-          keyboardType="default"
-          secureTextEntry
-          placeholderTextColor={Color.lightButtonText}
-          onChangeText={(text) => this.setState({ password: text })}
-          value={this.state.password}
-        />
-        <TouchableOpacity
-          style={[styles.signInButton, styles.mt16, styles.signInButtonFlexBox]}
-          activeOpacity={0.2}
-          onPress={async () => {
-            this.setState({ isLoading: true });
-            try {
-              const user = await Auth.signIn({
-                username: this.state.usernameOrEmail,
-                password: this.state.password,
-              });
-              this.props.navigation.navigate("DefaultMap");
-            } catch (error) {
-              Alert.alert(error.message);
-              console.log(error);
-            }
-            this.setState({ isLoading: false });
-          }}
-        >
-          <Text style={[styles.signInText, styles.buttonTypo]}>
-            {this.state.isLoading ? "LOADING..." : "SIGN IN"}
-          </Text>
-        </TouchableOpacity>
+    render() {
+        return (
+            <LinearGradient
+                colors={["#5DB45B", "#B7BA44"]}
+                style={styles.signInScreen}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}>
+                {/* WelcomeCard */}
+                <Text style={[styles.welcome]}>Welcome!</Text>
+                <TextInput
+                    style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
+                    placeholder="Username or Email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    placeholderTextColor={Color.lightButtonText}
+                    returnKeyType="next"
+                    onChangeText={(text) => this.setState({ usernameOrEmail: text })}
+                    value={this.state.usernameOrEmail}
+                />
+                <TextInput
+                    style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
+                    placeholder="Password"
+                    keyboardType="default"
+                    secureTextEntry
+                    placeholderTextColor={Color.lightButtonText}
+                    onChangeText={(text) => this.setState({ password: text })}
+                    value={this.state.password}
+                />
+                <TouchableOpacity
+                    style={[styles.signInButton, styles.mt16, styles.signInButtonFlexBox]}
+                    activeOpacity={0.2}
+                    onPress={async () => {
+                        this.setState({ isLoading: true });
+                        try {
+                            const user = await Auth.signIn({
+                                username: this.state.usernameOrEmail,
+                                password: this.state.password,
+                            });
+                            this.props.navigation.navigate("DefaultMap");
+                        } catch (error) {
+                            Alert.alert(error.message);
+                            console.log(error);
+                        }
+                        this.setState({ isLoading: false });
+                    }}>
+                    <Text style={[styles.signInText, styles.buttonTypo]}>
+                        {this.state.isLoading ? "LOADING..." : "SIGN IN"}
+                    </Text>
+                </TouchableOpacity>
 
-        {/* Buttons */}
-        <View style={[styles.orParent, styles.mt10]}>
-          <Text style={[styles.or, styles.orTypo]}>OR</Text>
-          <View style={[styles.frameParent]}>
-            <TouchableOpacity
-              style={[
-                styles.createAccountButton,
-                styles.buttonFlexBox,
-              ]}
-              activeOpacity={0.2}
-              onPress={() => {
-                this.props.navigation.navigate("SignUp");
-              }}
-            >
-              <Text style={[styles.createAccountText, styles.buttonTypo]}>
-                CREATE ACCOUNT
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.forgotPasswordButton, styles.mt10]}
-              activeOpacity={0.2}
-              onPress={() => {
-                this.props.navigation.navigate("ForgetPasswdBuffer");
-              }}
-            >
-              <Text style={[styles.forgotPasswordText]}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </LinearGradient>
-    );
-  }
+                {/* Buttons */}
+                <View style={[styles.orParent, styles.mt10]}>
+                    <Text style={[styles.or, styles.orTypo]}>OR</Text>
+                    <View style={[styles.frameParent]}>
+                        <TouchableOpacity
+                            style={[styles.createAccountButton, styles.buttonFlexBox]}
+                            activeOpacity={0.2}
+                            onPress={() => {
+                                this.props.navigation.navigate("SignUp");
+                            }}>
+                            <Text style={[styles.createAccountText, styles.buttonTypo]}>CREATE ACCOUNT</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.forgotPasswordButton, styles.mt10]}
+                            activeOpacity={0.2}
+                            onPress={() => {
+                                this.props.navigation.navigate("ForgetPasswdBuffer");
+                            }}>
+                            <Text style={[styles.forgotPasswordText]}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </LinearGradient>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -195,7 +175,7 @@ const styles = StyleSheet.create({
     },
     createAccountButton: {
         borderStyle: "solid",
-        borderColor: "#f5f4f2",
+        borderColor: "#f4f4f4",
         borderWidth: 3,
         height: 60,
     },

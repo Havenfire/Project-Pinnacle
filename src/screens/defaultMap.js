@@ -1,24 +1,33 @@
 import React, { Component } from "react";
-import { Text, TextInput, View, StyleSheet, StatusBar, Pressable, Button, Image, ScrollView, TouchableOpacity, Dimensions, Alert } from "react-native";
-import Constants from 'expo-constants';
+import {
+    Text,
+    TextInput,
+    View,
+    StyleSheet,
+    StatusBar,
+    Pressable,
+    Image,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    Dimensions,
+    Alert,
+} from "react-native";
+import Constants from "expo-constants";
 import * as Location from "expo-location";
-import { Callout, Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
+import { Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-import Dialog from "react-native-dialog";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from "react-native-svg";
 // import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import mapStyle from "../themes/mapStyle.json";
 // import mapStyleDark from "../themes/mapStyleDark.json";
 
-// import { LinearGradient } from "expo-linear-gradient";
-// import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 
-import { Storage } from "@aws-amplify/storage"
+import { Storage } from "@aws-amplify/storage";
 
-import { DataStore } from '@aws-amplify/datastore';
-import { Pin } from '../models';
+import { DataStore } from "@aws-amplify/datastore";
+import { Pin } from "../models";
 import { DialogModal } from "../components/DialogModal";
 
 const statusBarHeight = Constants.statusBarHeight;
@@ -48,6 +57,8 @@ export default class DefaultMap extends Component {
             tempCoordinate: null,
             tempPinCoordinate: null,
             tempImage: null,
+            modalPin: null,
+            showPinModal: false,
             photo: null,
             theme: mapStyle,
         };
@@ -57,7 +68,7 @@ export default class DefaultMap extends Component {
     async addPin(coordinate, title, description, image, dummy) {
         if (coordinate && title) {
             if (dummy) {
-                this.state.dummyPin = ({
+                this.state.dummyPin = {
                     coordinate: {
                         latitude: coordinate.latitude,
                         longitude: coordinate.longitude,
@@ -65,7 +76,7 @@ export default class DefaultMap extends Component {
                     title: title,
                     description: description ? description : undefined,
                     image: image ? image : undefined,
-                });
+                };
             } else {
                 delete this.state.dummyPin;
                 this.state.pins.push({
@@ -85,36 +96,32 @@ export default class DefaultMap extends Component {
 
                 await DataStore.save(
                     new Pin({
-                        "title": title,
-                        "description": description,
-                        "coordinates": [coordinate.latitude, coordinate.longitude],
-                        "reputation": 0,
-                        "image_uri": filename,
+                        title: title,
+                        description: description,
+                        coordinates: [coordinate.latitude, coordinate.longitude],
+                        reputation: 0,
+                        image_uri: filename,
                     })
                 );
-
             }
             this.forceUpdate();
         }
         return this.state.pins;
-
     }
-
 
     async uploadImageToS3(img_name, imageUri) {
         const key = img_name;
-        const contentType = 'image/jpeg';
+        const contentType = "image/jpeg";
 
         try {
             const response = await fetch(imageUri);
             const blob = await response.blob();
             await Storage.put(key, blob, { contentType });
-            console.log('Image uploaded successfully');
+            console.log("Image uploaded successfully");
         } catch (error) {
-            console.log('Error uploading image:', error);
+            console.log("Error uploading image:", error);
         }
     }
-
 
     async loadAllPins() {
         // await DataStore.clear(); ONLY run if there is local pins still, this clears out non database pins.
@@ -126,7 +133,7 @@ export default class DefaultMap extends Component {
             console.log(current_pin["title"]);
 
             var img_from_storage = await Storage.get(current_pin["image_uri"], {
-                level: 'public'
+                level: "public",
             });
             this.state.pins.push({
                 coordinate: {
@@ -139,7 +146,6 @@ export default class DefaultMap extends Component {
             });
         }
     }
-
 
     componentDidMount() {
         StatusBar.setHidden(true);
@@ -191,7 +197,8 @@ export default class DefaultMap extends Component {
             this.state.location.coords,
             this.state.tempTitle,
             this.state.tempDescription,
-            this.state.photo, true
+            this.state.photo,
+            true
         );
         this.setState({
             tempTitle: null,
@@ -247,7 +254,7 @@ export default class DefaultMap extends Component {
             this.state.pins.splice(dummyPinIndex, 1);
         }
         this.forceUpdate();
-    }
+    };
 
     confirmAddPin = (confirmed) => {
         if (confirmed) {
@@ -270,8 +277,6 @@ export default class DefaultMap extends Component {
             <React.Fragment>
                 <Marker
                     coordinate={pin.coordinate}
-                    title={pin.title}
-                    description={pin.description}
                     draggable={true}
                     onDragEnd={(e) => {
                         const distance = this.calculateDistance(pin.coordinate, e.nativeEvent.coordinate);
@@ -287,20 +292,7 @@ export default class DefaultMap extends Component {
                                 tempPinCoordinate: pin.coordinate,
                             });
                         }
-                    }}>
-                    <Callout>
-                        <Text>{pin.title}</Text>
-                        <Text>{pin.description}</Text>
-                        <Svg width={240} height={180}>
-                            <ImageSvg
-                                width={"100%"}
-                                height={"100%"}
-                                preserveAspectRatio="xMidYMid slice"
-                                href={{ uri: pin.image ? pin.image : null }}
-                            />
-                        </Svg>
-                    </Callout>
-                </Marker>
+                    }}></Marker>
                 <Circle
                     center={pin.coordinate}
                     radius={100}
@@ -308,8 +300,14 @@ export default class DefaultMap extends Component {
                     strokeColor={"rgba(255, 0, 0, 0.5)"}
                     strokeWidth={2}
                 />
-            </React.Fragment >
-        )
+            </React.Fragment>
+        );
+    };
+
+    showPinModal(pin) {
+        this.setState({ modalPin: pin });
+        this.setState({ showPinModal: true });
+        return;
     }
 
     drawPins = () => {
@@ -318,29 +316,13 @@ export default class DefaultMap extends Component {
             pinList.push(
                 <Marker
                     coordinate={pin.coordinate}
-                    title={pin.title}
-                    description={pin.description}
-                >
-                    {pin.title && pin.description ? (
-                        <Callout>
-                            <Text>{pin.title}</Text>
-                            <Text>{pin.description}</Text>
-                            {pin.image ? (<Svg width={240} height={180}>
-                                <ImageSvg
-                                    width={"100%"}
-                                    height={"100%"}
-                                    preserveAspectRatio="xMidYMid slice"
-                                    href={{ uri: pin.image ? pin.image : null }}
-                                />
-                            </Svg>) : null}
-                        </Callout>
-                    ) : null}
-                </Marker>
-            )
+                    onPress={() => {
+                        this.showPinModal(pin);
+                    }}></Marker>
+            );
         }
         return pinList;
-    }
-
+    };
 
     animatetoCL() {
         let r = {
@@ -351,7 +333,7 @@ export default class DefaultMap extends Component {
             longitudeDelta: this.state.mapRegion.longitudeDelta,
         };
         this.mapRef.current.animateToRegion(r);
-    };
+    }
     onUserLocationChange = () => {
         this._getLocationAsync();
     };
@@ -372,7 +354,7 @@ export default class DefaultMap extends Component {
                         latitudeDelta: this.state.location.coords.accuracy * 0.001,
                         longitudeDelta: this.state.location.coords.accuracy * 0.0005,
                     }}
-                    radius={Dimensions.get('window').width * 0.1}
+                    radius={Dimensions.get("window").width * 0.1}
                     onRegionChange={this._handleMapRegionChange}
                     onMarkerPress={() => this.setState({ showAddPinDialog: false })}>
                     {this.state.dummyPin ? this.drawDummyPin() : null}
@@ -388,53 +370,42 @@ export default class DefaultMap extends Component {
                     />
                     <Pressable // hamburger menu button
                         style={[styles.iconMenu, styles.ml16]}
-                        onPress={() => { this.props.navigation.navigate("DrawerMenu") }}
-                    >
-                        <Image
-                            style={styles.icon}
-                            resizeMode="cover"
-                            source={require("../assets/-icon-menu-dark.png")}
-                        />
+                        onPress={() => {
+                            if (this.state.dummyPin) return;
+                            this.props.navigation.navigate("DrawerMenu");
+                        }}>
+                        <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-menu-dark.png")} />
                     </Pressable>
                 </View>
-                <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1,]}>
+                <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1]}>
                     <TouchableOpacity // saved pins heart button
                         style={styles.iconHeart}
                         activeOpacity={0.2}
-                        onPress={() => { this.props.navigation.navigate("SavedPinsScreen") }
-                        }
-                    >
-                        <Image
-                            style={styles.icon}
-                            resizeMode="cover"
-                            source={require("../assets/-icon-heart-dark.png")}
-                        />
+                        onPress={() => {
+                            if (this.state.dummyPin) return;
+                            this.props.navigation.navigate("SavedPinsScreen");
+                        }}>
+                        <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-heart-dark.png")} />
                     </TouchableOpacity>
 
                     <TouchableOpacity // add pin plus button
                         style={styles.iconCircleX}
                         activeOpacity={0.2}
                         onPress={() => {
+                            if (this.state.dummyPin) return;
                             this.localGetPinInfo();
                         }}>
-                        <Image
-                            style={styles.icon}
-                            resizeMode="cover"
-                            source={require("../assets/-icon-circle-dark.png")}
-                        />
+                        <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-circle-dark.png")} />
                     </TouchableOpacity>
 
                     <TouchableOpacity // jump to current location button
                         style={styles.iconLocation}
                         activeOpacity={0.2}
                         onPress={() => {
+                            if (this.state.dummyPin) return;
                             this.animatetoCL();
                         }}>
-                        <Image
-                            style={styles.icon}
-                            resizeMode="cover"
-                            source={require("../assets/-icon-location-dark.png")}
-                        />
+                        <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-location-dark.png")} />
                     </TouchableOpacity>
                 </View>
 
@@ -444,26 +415,22 @@ export default class DefaultMap extends Component {
                         <View>
                             <DialogModal.Header title="Create a Pin" />
                             <DialogModal.Body>
-                                <Text style={styles.dialogTitleText}>
-                                    Title
-                                </Text>
+                                <Text style={styles.dialogTitleText}>Title</Text>
                                 <TextInput
                                     style={[styles.dialogTextInput, styles.dialogBodyText]}
                                     placeholder="Title"
-                                    placeholderTextColor={Color.lightButtonText}
+                                    placeholderTextColor={Color.darkButtonText}
                                     keyboardType="default"
                                     autoCapitalize="none"
                                     onChangeText={(title) => this.setState({ tempTitle: title })}
                                 />
                             </DialogModal.Body>
                             <DialogModal.Body>
-                                <Text style={styles.dialogTitleText}>
-                                    Description
-                                </Text>
+                                <Text style={styles.dialogTitleText}>Description</Text>
                                 <TextInput
                                     style={[styles.dialogTextInput, styles.dialogBodyText]}
                                     placeholder="Description (optional)"
-                                    placeholderTextColor={Color.lightButtonText}
+                                    placeholderTextColor={Color.darkButtonText}
                                     keyboardType="default"
                                     autoCapitalize="none"
                                     onChangeText={(description) => this.setState({ tempDescription: description })}
@@ -471,10 +438,14 @@ export default class DefaultMap extends Component {
                             </DialogModal.Body>
                             <DialogModal.Footer>
                                 <View style={styles.dialogButtonContainer}>
-                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={this.dismissAddPinDialog}>
+                                    <TouchableOpacity
+                                        style={[styles.dialogButton, styles.dialogButtonCancel]}
+                                        onPress={this.dismissAddPinDialog}>
                                         <Text style={styles.dialogButtonText}>Cancel</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonConfirm]} onPress={this.handleDialogueInputs}>
+                                    <TouchableOpacity
+                                        style={[styles.dialogButton, styles.dialogButtonConfirm]}
+                                        onPress={this.handleDialogueInputs}>
                                         <Text style={styles.dialogButtonText}>OK</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -490,19 +461,57 @@ export default class DefaultMap extends Component {
                             <DialogModal.Header title="Confirm Location" />
                             <DialogModal.Footer>
                                 <View style={styles.dialogButtonContainer}>
-                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonCancel]} onPress={() => {
-                                        this.confirmAddPin(false);
-                                    }}>
+                                    <TouchableOpacity
+                                        style={[styles.dialogButton, styles.dialogButtonCancel]}
+                                        onPress={() => {
+                                            this.confirmAddPin(false);
+                                        }}>
                                         <Text style={styles.dialogButtonText}>Cancel</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonConfirm]} onPress={() => {
-                                        this.confirmAddPin(true);
-                                    }}>
+                                    <TouchableOpacity
+                                        style={[styles.dialogButton, styles.dialogButtonConfirm]}
+                                        onPress={() => {
+                                            this.confirmAddPin(true);
+                                        }}>
                                         <Text style={styles.dialogButtonText}>OK</Text>
                                     </TouchableOpacity>
                                 </View>
                             </DialogModal.Footer>
                         </View>
+                    </DialogModal.Container>
+                </DialogModal>
+
+                {/* pin info dialog */}
+                <DialogModal isVisible={this.state.showPinModal}>
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            this.setState({ showPinModal: false });
+                        }}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
+                    <DialogModal.Container style={styles.dialog}>
+                        {this.state.modalPin ? (
+                            <View>
+                                {this.state.modalPin.title ? <DialogModal.Header title={this.state.modalPin.title} /> : null}
+                                {this.state.modalPin.description ? (
+                                    <DialogModal.Body>
+                                        <Text style={styles.dialogBodyText}>{this.state.modalPin.description}</Text>
+                                    </DialogModal.Body>
+                                ) : null}
+                                {this.state.modalPin.image ? (
+                                    <DialogModal.Body>
+                                        <Svg width={"100%"} height={200}>
+                                            <ImageSvg
+                                                width={"100%"}
+                                                height={"100%"}
+                                                preserveAspectRatio="xMidYMid slice"
+                                                href={{ uri: this.state.modalPin.image ? this.state.modalPin.image : null }}
+                                            />
+                                        </Svg>
+                                    </DialogModal.Body>
+                                ) : null}
+                            </View>
+                        ) : null}
                     </DialogModal.Container>
                 </DialogModal>
             </View>
@@ -513,13 +522,6 @@ export default class DefaultMap extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    text: {
-        margin: 40,
-        fontSize: 18,
-        fontWeight: "bold",
-        textAlign: "auto",
-        color: "#34495e",
     },
     map: {
         width: "100%",
@@ -610,16 +612,16 @@ const styles = StyleSheet.create({
     dialogTitleText: {
         fontFamily: FontFamily.montserratSemibold,
         fontSize: 18,
-        color: Color.lightText,
+        color: Color.darkText,
     },
     dialogBodyText: {
         fontFamily: FontFamily.montserratRegular,
         fontSize: 16,
-        color: Color.lightText,
+        color: Color.darkText,
     },
     dialogTextInput: {
         paddingTop: 10,
-        borderColor: Color.lightButtonText,
+        borderColor: Color.darkButtonText,
         borderBottomWidth: 2,
     },
     dialogButtonContainer: {
@@ -640,8 +642,15 @@ const styles = StyleSheet.create({
         backgroundColor: Color.orange,
     },
     dialogButtonText: {
-        color: Color.lightText,
+        color: Color.darkText,
         fontFamily: FontFamily.montserratSemibold,
         fontSize: 18,
+    },
+    modalOverlay: {
+        position: "absolute",
+        top: -50,
+        bottom: -50,
+        left: -50,
+        right: -50,
     },
 });

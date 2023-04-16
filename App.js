@@ -26,6 +26,8 @@ import DrawerMenu from "./src/screens/DrawerMenu";
 import Splashscreen from "./src/screens/Splashscreen";
 
 Amplify.configure(awsconfig);
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 export default function App() {
     const [hideSplashScreen, setHideSplashScreen] = React.useState(false);

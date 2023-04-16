@@ -7,38 +7,30 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 const Splashscreen = () => {
   return (
     <LinearGradient
-      style={[styles.splashscreen, styles.splashscreenFlexBox]}
-      locations={[0, 1]}
-      colors={["rgba(255, 190, 0, 0.46)", "rgba(255, 190, 0, 0)"]}
+      style={[styles.container]}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      colors={["#B7BA44", "#5DB45B"]}
     >
-      <Text style={[styles.projectPinnacle, styles.splashscreenFlexBox]}>
-        Project Pinnacle
+      <Text style={[styles.projectPinnacle]}>
+        {`Project\nPinnacle`}
       </Text>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  splashscreenFlexBox: {
+  container: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
   },
   projectPinnacle: {
     alignSelf: "stretch",
-    fontSize: FontSize.size_13xl,
-    fontWeight: "900",
+    fontSize: FontSize.size_19xl,
     fontFamily: FontFamily.montserratBlack,
-    color: Color.whitesmoke_100,
+    color: Color.lightText,
     textAlign: "center",
-    display: "flex",
-  },
-  splashscreen: {
-    backgroundColor: '#5DB45B',
-    width: "100%",
-    height: 800,
-    flexDirection: "row",
-    padding: Padding.p_3xs,
   },
 });
 

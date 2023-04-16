@@ -8,10 +8,8 @@ export const DialogModal = ({ isVisible = false, children, ...props }) => {
         <RNModal
             backdropOpacity={0}
             isVisible={isVisible}
-            animationInTiming={500}
-            animationOutTiming={500}
-            backdropTransitionInTiming={300}
-            backdropTransitionOutTiming={300}
+            animationIn={"fadeIn"}
+            animationOut={"fadeOut"}
             {...props}>
             {children}
         </RNModal>
@@ -32,7 +30,7 @@ const ModalFooter = ({ children }) => <View style={styles.footer}>{children}</Vi
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Color.darkDialog,
+        backgroundColor: Color.lightDialog,
         borderRadius: 25,
     },
     header: {
@@ -40,24 +38,24 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     headerText: {
-        paddingVertical: 30,
+        paddingVertical: 20,
         textAlign: "center",
         fontSize: 26,
         fontFamily: FontFamily.montserratExtrabold,
-        color: Color.lightText,
+        color: Color.darkText,
     },
     body: {
         justifyContent: "center",
-        paddingHorizontal: 30,
-        paddingBottom: 30,
-        color: Color.lightText,
+        paddingHorizontal: 20,
+        paddingBottom: 20,
+        color: Color.darkText,
     },
     footer: {
         justifyContent: "center",
         alignItems: "center",
-        paddingBottom: 30,
+        paddingBottom: 20,
         flexDirection: "row",
-        color: Color.lightText,
+        color: Color.darkText,
     },
 });
 
