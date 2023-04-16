@@ -57,7 +57,7 @@ const ConfirmationCodeScreen = () => {
           style={[styles.confirmationCodeScreenChild, styles.mt44]}
           placeholder="000000"
           keyboardType="number-pad"
-          placeholderTextColor="rgba(36, 28, 28, 0.6)"
+          placeholderTextColor="rgba(28, 28, 28, 0.6)"
           maxLength={6}
           onChangeText={setCode}
         />
@@ -93,35 +93,32 @@ const styles = StyleSheet.create({
   },
   pleaseEnterThe: {
     fontSize: FontSize.size_13xl,
-    fontWeight: "600",
-    fontFamily: FontFamily.montserratSemibold,
-    color: Color.black,
+    fontFamily: FontFamily.montserratExtrabold,
+    color: Color.darkText,
     textAlign: "center",
-    width: 300,
   },
   pleaseEnterTheConfirmationWrapper: {
     padding: Padding.p_3xs,
     flexDirection: "row",
   },
   confirmationCodeScreenChild: {
-    alignSelf: "stretch",
+    alignSelf: "center",
     alignItems: "center",
+    fontFamily: FontFamily.montserratMedium,
+    fontSize: FontSize.size_base,
   },
   buttonText: {
-    fontSize: FontSize.size_base,
-    fontWeight: "800",
+    fontSize: FontSize.size_xl,
     fontFamily: FontFamily.montserratExtrabold,
-    color: Color.lightButtonText,
-    textAlign: "left",
+    color: Color.lightText,
   },
   buttonSolid: {
-
+    justifyContent: "center",
     borderRadius: Border.br_12xl_5,
-    backgroundColor: Color.black,
-    height: 60,
-    paddingHorizontal: Padding.p_6xl,
-    paddingVertical: Padding.p_base,
-    width: 300,
+    backgroundColor: Color.darkText,
+    paddingVertical: Padding.p_xl,
+    alignItems: "center",
+    alignSelf: "stretch",
     flexDirection: "row",
   },
   confirmationCodeScreen: {
