@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, Image, StyleSheet, Text, View,SafeAreaView } from "react-native";
+import { Pressable, Image, StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PinButtonsScrollable from "../components/PinButtonsScrollable";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
@@ -15,41 +15,27 @@ const SavedPinsScreen = () => {
           onPress={() => navigation.goBack()}
         >
           <Image
-            style={styles.icon}
             resizeMode="cover"
             source={require("../assets/back-button-light.png")}
           />
         </Pressable>
-        <Text style={styles.savedPins}>Saved Pins</Text>
+        <Text style={styles.savedPinsTitle}>Saved Pins</Text>
       </View>
-      <PinButtonsScrollable
-        onFramePressablePress={() => {}}
-        onFramePressablePress1={() => {}}
-        onFramePressablePress2={() => {}}
-      />
+      {/* <PinButtonsScrollable pinList={ navigation.my_pins } /> */}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  mt16: {
-    marginTop: 16,
-  },
-  icon: {
-    height: "100%",
-    overflow: "hidden",
-    width: "100%",
-  },
   backButtonLight: {
     width: 30,
     height: 30,
   },
-  savedPins: {
+  savedPinsTitle: {
     fontSize: FontSize.size_19xl,
-    fontWeight: "800",
     fontFamily: FontFamily.montserratExtrabold,
-    color: Color.black,
-    textAlign: "left",
+    color: Color.darkText,
+    textAlign: "center",
   },
   backButtonLightParent: {
     alignSelf: "stretch",
@@ -59,12 +45,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   savedPinsScreen: {
-    backgroundColor: Color.white,
+    backgroundColor: "#f4f4f4",
     flex: 1,
-    height: 800,
-    padding: Padding.p_base,
     alignItems: "center",
-    width: "100%",
+    alignSelf: "center",
+    width: "90%",
   },
 });
 

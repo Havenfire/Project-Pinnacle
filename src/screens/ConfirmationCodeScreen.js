@@ -66,7 +66,7 @@ const ConfirmationCodeScreen = () => {
           style={[styles.buttonSolid, styles.mt44, styles.buttonSolidFlexBox]}
           onPress={confirmSignUp}
         >
-          <Text style={styles.buttonText}>LET’S GO</Text>
+          <Text style={styles.buttonText}>LET'S GO</Text>
         </Pressable>
 
         <Pressable
