@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Padding, FontFamily, FontSize, Color, Border } from "../GlobalStyles";
-import { Auth } from "aws-amplify";
+import { Auth } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 
 export default class SignInPage extends Component {
     constructor(props) {
@@ -15,6 +16,9 @@ export default class SignInPage extends Component {
     }
 
     render() {
+
+        //this clears the local cache, needs to stay
+
         return (
             <LinearGradient
                 colors={["#5DB45B", "#B7BA44"]}
@@ -52,7 +56,11 @@ export default class SignInPage extends Component {
                                 username: this.state.usernameOrEmail,
                                 password: this.state.password,
                             });
-                            this.props.navigation.navigate("DefaultMap");
+
+                            // const user_passed = user.username;
+                            // console.log(user);
+                            // console.log(user_passed);
+                            this.props.navigation.navigate("DefaultMap", {user});
                         } catch (error) {
                             Alert.alert(error.message);
                             console.log(error);
