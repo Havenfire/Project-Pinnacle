@@ -18,7 +18,8 @@ const SignInPage = ({ navigation }) => {
           username: usernameOrEmail,
           password,
         });
-        navigation.navigate("DefaultMap", {user});
+        const nav_username = user.username;
+        navigation.navigate("DefaultMap", {nav_username});
       } catch (error) {
         Alert.alert(error.message);
         console.log(error);

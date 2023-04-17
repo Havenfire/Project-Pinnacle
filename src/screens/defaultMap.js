@@ -67,10 +67,9 @@ export default class DefaultMap extends Component {
             theme: mapStyle,
         };
         const route = this.props.route;
-        // console.log(route);
-        // console.log(route.params.user.username);
+        console.log(route);
 
-        this.state.username = route.params.user.username;
+        this.state.username = route.params.nav_username;
         this.mapRef = React.createRef();
     }
 
