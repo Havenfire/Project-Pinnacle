@@ -4,6 +4,7 @@ type Pin @model @auth(rules: [{allow: public}]) {
   description: String
   coordinates: [Float!]
   reputation: Int!
-  image_uri: String
+  image_uri: String!
+  username: String!
 }
  

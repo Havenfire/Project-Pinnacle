@@ -3,10 +3,11 @@ import { Pressable, Image, StyleSheet, Text, View, SafeAreaView } from "react-na
 import { useNavigation } from "@react-navigation/native";
 import PinButtonsScrollable from "../components/PinButtonsScrollable";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
+import { useRoute } from "@react-navigation/native";
 
 const SavedPinsScreen = () => {
   const navigation = useNavigation();
-
+  const route = useRoute();
   return (
     <SafeAreaView style={styles.savedPinsScreen}>
       <View style={styles.backButtonLightParent}>

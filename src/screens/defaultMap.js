@@ -23,6 +23,7 @@ import mapStyle from "../themes/mapStyle.json";
 // import mapStyleDark from "../themes/mapStyleDark.json";
 
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
+import { useRoute } from "@react-navigation/native";
 
 import { Storage } from "@aws-amplify/storage";
 
@@ -50,6 +51,7 @@ export default class DefaultMap extends Component {
                 },
             },
             pins: [],
+            my_pins: [],
             showAddPinDialog: false,
             showConfirmPinDialog: false,
             tempTitle: null,
@@ -60,8 +62,14 @@ export default class DefaultMap extends Component {
             modalPin: null,
             showPinModal: false,
             photo: null,
+            username: null,
             theme: mapStyle,
         };
+        const route = this.props.route;
+        console.log(route);
+        console.log(route.params.user.username);
+
+        this.state.username = route.params.user.username;
         this.mapRef = React.createRef();
     }
 
@@ -93,16 +101,23 @@ export default class DefaultMap extends Component {
             if (!dummy) {
                 const filename = `${coordinate.latitude}_${coordinate.longitude}.jpeg`;
                 this.uploadImageToS3(filename, image);
-
-                await DataStore.save(
+                const newPin = await DataStore.save(
                     new Pin({
-                        title: title,
-                        description: description,
-                        coordinates: [coordinate.latitude, coordinate.longitude],
-                        reputation: 0,
-                        image_uri: filename,
+                        "title": title,
+                        "description": description,
+                        "coordinates": [coordinate.latitude, coordinate.longitude],
+                        "reputation": 0,
+                        "image_uri": filename,
+                        "username": this.state.username,
                     })
                 );
+
+                await Storage.put(newPin.username, newPin.id, {
+                    level: 'protected',
+                    contentType: 'text/plain'
+                });
+
+
             }
             this.forceUpdate();
         }
@@ -124,17 +139,22 @@ export default class DefaultMap extends Component {
     }
 
     async loadAllPins() {
-        // await DataStore.clear(); ONLY run if there is local pins still, this clears out non database pins.
-        const models = await DataStore.query(Pin);
-        console.log(models);
+
+        var models;
+        try {
+            models = await DataStore.query(Pin);
+            console.log("models");
+            console.log(models);
+        } catch (error) {
+            console.log('Error retrieving pins', error);
+        }
 
         for (var i = 0; i < models.length; i++) {
             var current_pin = models[i];
-            console.log(current_pin["title"]);
-
             var img_from_storage = await Storage.get(current_pin["image_uri"], {
                 level: "public",
             });
+            console.log(img_from_storage);
             this.state.pins.push({
                 coordinate: {
                     latitude: current_pin["coordinates"][0],
@@ -143,9 +163,49 @@ export default class DefaultMap extends Component {
                 title: current_pin["title"],
                 description: current_pin["description"],
                 image: img_from_storage,
+                username: current_pin["username"],
             });
+
+            if(current_pin.username === this.state.username){
+                this.state.my_pins.push({
+                    coordinate: {
+                        latitude: current_pin["coordinates"][0],
+                        longitude: current_pin["coordinates"][1],
+                    },
+                    title: current_pin["title"],
+                    description: current_pin["description"],
+                    image: img_from_storage,
+                    username: current_pin["username"],
+
+                });
+            }
+            console.log(current_pin.title);
+            console.log(current_pin.image_uri);
+            console.log(this.state.pins);
         }
     }
+
+    //need to add button
+    async deletePin(pin_ID){
+        var index = 0;
+        for (let i=0; i < this.state.pins.length; i++) {
+            if (this.state.pins[i].id === pin_ID) {
+                index = i;
+                break;
+            }
+        }
+        
+        //removed from local list
+        const dead_pin = this.state.pins[index].splice(index, index);
+
+        //remove from server
+        const modelToDelete = await DataStore.query(Pin, pin_ID);
+        DataStore.delete(modelToDelete);
+        this.forceUpdate();
+        
+    }
+
+    
 
     componentDidMount() {
         StatusBar.setHidden(true);
@@ -379,7 +439,7 @@ export default class DefaultMap extends Component {
                         activeOpacity={0.2}
                         onPress={() => {
                             if (this.state.dummyPin) return;
-                            this.props.navigation.navigate("SavedPinsScreen");
+                            this.props.navigation.navigate("SavedPinsScreen", {my_pins});
                         }}>
                         <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-heart-dark.png")} />
                     </TouchableOpacity>
@@ -482,6 +542,8 @@ export default class DefaultMap extends Component {
                     <TouchableWithoutFeedback
                         onPress={() => {
                             this.setState({ showPinModal: false });
+                            console.log(JSON.stringify(this.state.modalPin));
+                            console.log(this.state.username);
                         }}>
                         <View style={styles.modalOverlay} />
                     </TouchableWithoutFeedback>
@@ -506,6 +568,22 @@ export default class DefaultMap extends Component {
                                         </Svg>
                                     </DialogModal.Body>
                                 ) : null}
+
+                                {this.state.modalPin.username == this.state.username ? (
+                                <DialogModal.Footer>
+                                <View style={styles.dialogButtonContainer}>
+                                    <TouchableOpacity
+                                        style={[styles.dialogButton, styles.dialogButtonCancel]}
+                                        onPress={() => {
+                                            this.deletePin();
+                                        }}>
+                                        <Text style={styles.dialogButtonText}>Delete</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+                            </DialogModal.Footer>
+                            ) : null}
+
                             </View>
                         ) : null}
                     </DialogModal.Container>

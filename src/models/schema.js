@@ -43,7 +43,14 @@ export const schema = {
                     "name": "image_uri",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "username": {
+                    "name": "username",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -92,5 +99,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "551ad589dc62a9411b3ab2c5c4263dc0"
+    "version": "681a4a44ec0bfa0213806483355da775"
 };
