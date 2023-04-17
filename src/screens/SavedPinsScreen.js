@@ -8,6 +8,7 @@ import { useRoute } from "@react-navigation/native";
 const SavedPinsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  console.log(route);
   return (
     <SafeAreaView style={styles.savedPinsScreen}>
       <View style={styles.backButtonLightParent}>
@@ -20,9 +21,9 @@ const SavedPinsScreen = () => {
             source={require("../assets/back-button-light.png")}
           />
         </Pressable>
-        <Text style={styles.savedPinsTitle}>Saved Pins</Text>
+        <Text style={styles.savedPinsTitle}>My Pins</Text>
       </View>
-      {/* <PinButtonsScrollable pinList={ navigation.my_pins } /> */}
+      <PinButtonsScrollable pinList={ route.params.my_pins } />
     </SafeAreaView>
   );
 };
