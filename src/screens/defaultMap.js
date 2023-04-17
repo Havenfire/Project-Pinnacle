@@ -304,24 +304,9 @@ export default class DefaultMap extends Component {
         );
     };
 
-    showPinModal(pin) {
+    showPinPopup = (pin) => {
         this.setState({ modalPin: pin });
         this.setState({ showPinModal: true });
-        return;
-    }
-
-    drawPins = () => {
-        var pinList = [];
-        for (var pin of this.state.pins) {
-            pinList.push(
-                <Marker
-                    coordinate={pin.coordinate}
-                    onPress={() => {
-                        this.showPinModal(pin);
-                    }}></Marker>
-            );
-        }
-        return pinList;
     };
 
     animatetoCL() {
@@ -334,6 +319,7 @@ export default class DefaultMap extends Component {
         };
         this.mapRef.current.animateToRegion(r);
     }
+
     onUserLocationChange = () => {
         this._getLocationAsync();
     };
@@ -358,7 +344,17 @@ export default class DefaultMap extends Component {
                     onRegionChange={this._handleMapRegionChange}
                     onMarkerPress={() => this.setState({ showAddPinDialog: false })}>
                     {this.state.dummyPin ? this.drawDummyPin() : null}
-                    {this.state.pins ? this.drawPins() : null}
+                    {this.state.pins
+                        ? this.state.pins.map((pin) => {
+                            return (
+                                <Marker
+                                    coordinate={pin.coordinate}
+                                    onPress={() => {
+                                        this.showPinPopup(pin);
+                                    }}></Marker>
+                            );
+                        })
+                        : null}
                 </MapView>
 
                 <View style={[styles.titleBar, styles.parentFlexBox, styles.parentFlexBox1]}>
