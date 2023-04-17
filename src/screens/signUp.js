@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 import { Auth } from "aws-amplify";
+import { useRef } from "react";
 
 const SignUpPage = () => {
     const [ageMinReq, setAgeMinReq] = useState(false);
@@ -56,6 +57,9 @@ const SignUpPage = () => {
         }
     }
 
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
     return (
         <>
             <LinearGradient
@@ -69,12 +73,17 @@ const SignUpPage = () => {
                     placeholder="Username"
                     keyboardType="default"
                     autoCapitalize="none"
+                    returnKeyType="next"
                     onChangeText={setUsername}
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
+                    onSubmitEditing={() => {
+                        emailRef.current.focus();
+                      }}
+                      blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
-                    placeholder="Email"
+                    placeholder="Email" ref={emailRef}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     returnKeyType="next"
@@ -82,20 +91,29 @@ const SignUpPage = () => {
                     inputMode="email"
                     onChangeText={setEmail}
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
+                    onSubmitEditing={() => {
+                        passwordRef.current.focus();
+                      }}
+                      blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
-                    placeholder="Password"
+                    placeholder="Password" ref={passwordRef}
                     keyboardType="default"
                     autoCapitalize="none"
                     secureTextEntry={true}
                     type="new-password"
+                    returnKeyType="next"
                     onChangeText={setPassword}
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
+                    onSubmitEditing={() => {
+                        confirmPasswordRef.current.focus();
+                      }}
+                      blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
-                    placeholder="Confirm Password"
+                    placeholder="Confirm Password" ref={confirmPasswordRef}
                     keyboardType="default"
                     autoCapitalize="none"
                     returnKeyType="done"

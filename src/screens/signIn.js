@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Padding, FontFamily, FontSize, Color, Border } from "../GlobalStyles";
 import { Auth } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
+import { useRef } from "react";
 
 const SignInPage = ({ navigation }) => {
     const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
@@ -25,6 +26,7 @@ const SignInPage = ({ navigation }) => {
       setIsLoading(false);
     }
   
+    const passwordRef = useRef();
     return (
       <LinearGradient
         colors={["#5DB45B", "#B7BA44"]}
@@ -42,10 +44,14 @@ const SignInPage = ({ navigation }) => {
           returnKeyType="next"
           onChangeText={setUsernameOrEmail}
           value={usernameOrEmail}
+          onSubmitEditing={() => {
+            passwordRef.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <TextInput
           style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
-          placeholder="Password"
+          placeholder="Password" ref={passwordRef}
           keyboardType="default"
           secureTextEntry
           placeholderTextColor={Color.lightButtonText}
