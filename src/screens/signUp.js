@@ -170,11 +170,11 @@ const SignUpPage = () => {
                     <Pressable style={styles.tosOverlayBg} onPress={closeToS} />
                     <View onClose={closeToS} style={styles.tosModal}>
                         <Text style={styles.termsOfServiceContainer}>
-                            <Text style={styles.termsOfService}>
+                            <Text style={styles.termsOfServiceTitle}>
                                 {"TERMS OF SERVICE\n"}
                             </Text>
-                            <Text style={styles.loremIpsumDolor}>
-                                {"\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+                            <Text style={styles.termsOfServiceText}>
+                                {"\nBy agreeing to the terms and service, you are agreeing to use the Pinnacle app in good faith and conduct yourself in a respectable manner without placing extraneous pins or pictures containing explicit material."}
                             </Text>
                         </Text>
                     </View>
@@ -273,11 +273,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
     },
-    termsOfService: {
+    termsOfServiceTitle: {
         fontFamily: FontFamily.montserratExtrabold,
         fontSize: 20,
     },
-    loremIpsumDolor: {
+    termsOfServiceText: {
         fontFamily: FontFamily.montserratRegular,
         fontSize: 14,
     },

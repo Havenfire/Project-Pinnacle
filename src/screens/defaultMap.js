@@ -28,6 +28,7 @@ import { Pin } from "../models";
 import { DialogModal } from "../components/DialogModal";
 
 const statusBarHeight = Constants.statusBarHeight;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 export default class DefaultMap extends Component {
     constructor(props) {
         super(props);
@@ -132,6 +133,12 @@ export default class DefaultMap extends Component {
     }
 
     async loadAllPins() {
+
+        DataStore.clear();
+        await sleep(2500);
+        DataStore.start();
+        await sleep(2500);
+
         try {
             this.state.models = await DataStore.query(Pin);
         } catch (error) {
@@ -164,11 +171,11 @@ export default class DefaultMap extends Component {
                     description: current_pin["description"],
                     image: img_from_storage,
                     username: current_pin["username"],
-
                 });
             }
-
+            console.log("Loaded pin: ", current_pin);
         }
+        this.forceUpdate();
     }
 
     async deletePin(pin) {

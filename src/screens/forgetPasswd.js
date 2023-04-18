@@ -97,53 +97,6 @@ export default class ChangePasswdPage extends Component {
     }
 }
 
-// const ResetPasswordScreen = () => {
-//     const navigation = useNavigation();
-
-//     return (
-//         <LinearGradient
-//             colors={['#B7BA44', '#FBBC05']}
-//             style={styles.container}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 0, y: 1 }}
-//         >
-//             <View style={[styles.resetPasswordScreen, styles.resetFlexBox]}>
-//                 <View style={[styles.resetPasswordParent, styles.resetFlexBox]}>
-//                     <Text style={[styles.resetPassword]}>
-//                         Reset Password
-//                     </Text>
-//                     <TextInput
-//                         style={[styles.email, styles.button]}
-//                         placeholder="Email"
-//                         keyboardType="email-address"
-//                         autoCapitalize="none"
-//                         type="email"
-//                         inputMode="email"
-//                         placeholderTextColor="rgba(36, 28, 28, 0.6)"
-//                     />
-//                     <TouchableOpacity
-//                         style={[styles.reset, styles.button]}
-//                         activeOpacity={0.2}
-//                         onPress={() => navigation.navigate("SignIn")}
-//                     >
-//                         <Text style={[styles.buttonText, styles.buttonTextTypo]}>RESET</Text>
-//                     </TouchableOpacity>
-//                 </View>
-//                 <Pressable
-//                     style={[styles.backButton]}
-//                     onPress={() => navigation.goBack()}
-//                 >
-//                     <Image
-//                         style={styles.icon}
-//                         resizeMode="cover"
-//                         source={require("../assets/back-button-light4.png")}
-//                     />
-//                 </Pressable>
-//             </View>
-//         </LinearGradient>
-//     );
-// };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
