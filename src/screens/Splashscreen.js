@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { FontFamily, Color } from "../GlobalStyles";
 
 const Splashscreen = () => {
   return (
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
   },
   projectPinnacle: {
     alignSelf: "stretch",
-    fontSize: FontSize.size_19xl,
+    fontSize: 38,
     fontFamily: FontFamily.montserratBlack,
     color: Color.lightText,
     textAlign: "center",

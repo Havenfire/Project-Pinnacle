@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, TextInput, Pressable, TouchableOpacity, View, Image, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
+import { FontFamily, Color } from "../GlobalStyles";
 import { Auth } from "aws-amplify";
 
 export default class ChangePasswdPage extends Component {
@@ -156,14 +156,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     button: {
-        paddingHorizontal: Padding.p_6xl,
+        paddingHorizontal: 25,
         flexDirection: "row",
-        borderRadius: Border.br_12xl_5,
+        borderRadius: 32,
         alignSelf: "stretch",
         alignItems: "center",
     },
     resetPassword: {
-        fontSize: FontSize.size_19xl,
+        fontSize: 38,
         fontFamily: FontFamily.montserratExtrabold,
         color: Color.black,
         textAlign: "center",
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
         backgroundColor: Color.darkButton,
         height: 60,
         marginTop: 16,
-        paddingVertical: Padding.p_xl,
+        paddingVertical: 20,
         color: Color.lightButtonText,
     },
     buttonText: {
-        fontSize: FontSize.size_xl,
+        fontSize: 20,
         color: Color.lightButtonText,
         fontFamily: FontFamily.montserratExtrabold,
         textAlign: "left",
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.black,
         height: 60,
         marginTop: 16,
-        paddingVertical: Padding.p_base,
+        paddingVertical: 16,
         justifyContent: "center",
     },
     icon: {

@@ -7,7 +7,7 @@ import {
   Image,
   View,
 } from "react-native";
-import { FontSize, FontFamily, Color } from "../GlobalStyles";
+import { FontFamily, Color } from "../GlobalStyles";
 
 const Menu = () => {
   return (
@@ -15,7 +15,7 @@ const Menu = () => {
       <TouchableOpacity
         style={styles.wrapperFlexBox}
         activeOpacity={0.2}
-        onPress={() => {}}
+        onPress={() => { }}
       >
         <Text style={styles.saved}>Saved</Text>
       </TouchableOpacity>
@@ -27,7 +27,7 @@ const Menu = () => {
       <TouchableOpacity
         style={[styles.wrapperFlexBox, styles.mt14]}
         activeOpacity={0.2}
-        onPress={() => {}}
+        onPress={() => { }}
       >
         <Text style={styles.saved}>History</Text>
       </TouchableOpacity>
@@ -39,7 +39,7 @@ const Menu = () => {
       <TouchableOpacity
         style={[styles.settingsWrapper, styles.mt14, styles.wrapperFlexBox]}
         activeOpacity={0.2}
-        onPress={() => {}}
+        onPress={() => { }}
       >
         <Text style={styles.saved}>Settings</Text>
       </TouchableOpacity>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   saved: {
     flex: 1,
-    fontSize: FontSize.size_xl,
+    fontSize: 20,
     fontFamily: FontFamily.montserratRegular,
     color: Color.black,
     textAlign: "left",

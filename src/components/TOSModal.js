@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { FontFamily, FontSize, Color, Border, Padding } from "../GlobalStyles";
+import { FontFamily, Color } from "../GlobalStyles";
 
 const TOSModal = () => {
   return (
@@ -28,15 +28,15 @@ const styles = StyleSheet.create({
   },
   termsOfServiceContainer: {
     alignSelf: "stretch",
-    fontSize: FontSize.size_base,
+    fontSize: 16,
     color: Color.black,
     textAlign: "left",
   },
   tosModal: {
-    borderRadius: Border.br_12xl_5,
+    borderRadius: 32,
     backgroundColor: Color.lightText,
     width: 360,
-    padding: Padding.p_xl,
+    padding: 20,
     alignItems: "center",
     justifyContent: "center",
     maxWidth: "100%",

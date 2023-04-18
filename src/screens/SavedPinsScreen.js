@@ -2,7 +2,7 @@ import * as React from "react";
 import { Pressable, Image, StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MyPinsList from "../components/MyPins";
-import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
+import { FontFamily, Color, Padding } from "../GlobalStyles";
 import { useRoute } from "@react-navigation/native";
 
 const SavedPinsScreen = () => {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   savedPinsTitle: {
-    fontSize: FontSize.size_19xl,
+    fontSize: 38,
     fontFamily: FontFamily.montserratExtrabold,
     color: Color.darkText,
     textAlign: "center",
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   backButtonLightParent: {
     alignSelf: "stretch",
     flexDirection: "row",
-    padding: Padding.p_3xs,
+    padding: 10,
     justifyContent: "space-between",
     alignItems: "center",
   },

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ScrollView, Image, StyleSheet, Text, View } from "react-native";
-import { Color, FontSize, FontFamily } from "../GlobalStyles";
+import { Color, FontFamily } from "../GlobalStyles";
 
 const MyPinsList = ({ pinList }) => {
     return (
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         height: 105,
     },
     itemTitle: {
-        fontSize: FontSize.size_xl,
+        fontSize: 20,
         fontFamily: FontFamily.montserratExtrabold,
         color: Color.darkText,
     },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     noPinsText: {
-        fontSize: FontSize.size_xl,
+        fontSize: 20,
         fontFamily: FontFamily.montserratLight,
         color: Color.darkText,
     },

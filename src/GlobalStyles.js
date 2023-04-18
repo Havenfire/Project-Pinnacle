@@ -9,15 +9,7 @@ export const FontFamily = {
   montserratSemibold: "Montserrat_semibold",
   montserratBlack: "Montserrat_black",
 };
-/* font sizes */
-export const FontSize = {
-  size_xl: 20,
-  size_19xl: 38,
-  size_xs: 12,
-  size_sm: 14,
-  size_base: 16,
-  size_13xl: 32,
-};
+
 /* Colors */
 export const Color = {
   black: "#000",
@@ -34,29 +26,4 @@ export const Color = {
   darkButton: "rgba(28, 28, 28, 0.25)",
   darkButtonText: "#1c1c1cCC",
   orange: "#fbbc05",
-};
-/* Paddings */
-export const Padding = {
-  p_base: 16,
-  p_3xs: 10,
-  p_6xl: 25,
-  p_smi: 13,
-  p_8xs: 5,
-  p_xl: 20,
-  p_11xl: 30,
-  p_sm: 14,
-};
-/* Margins */
-export const Margin = {
-  m_base: 16,
-  m_sm: 14,
-  m_8xs: 5,
-  m_11xs: 2,
-  m_3xs: 10,
-  m_25xl: 44,
-};
-/* border radiuses */
-export const Border = {
-  br_3xs: 10,
-  br_12xl_5: 32,
 };

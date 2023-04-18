@@ -5,15 +5,12 @@ import {
   View,
   TextInput,
   Pressable,
-  TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
+import { FontFamily, Color } from "../GlobalStyles";
 import { Auth } from 'aws-amplify';
-import { useForm } from 'react-hook-form';
 import { useRoute } from "@react-navigation/native";
 
 const ConfirmationCodeScreen = () => {
@@ -93,31 +90,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pleaseEnterThe: {
-    fontSize: FontSize.size_13xl,
+    fontSize: 38,
     fontFamily: FontFamily.montserratExtrabold,
     color: Color.darkText,
     textAlign: "center",
   },
   pleaseEnterTheConfirmationWrapper: {
-    padding: Padding.p_3xs,
+    padding: 10,
     flexDirection: "row",
   },
   confirmationCodeScreenChild: {
     alignSelf: "center",
     alignItems: "center",
     fontFamily: FontFamily.montserratMedium,
-    fontSize: FontSize.size_base,
+    fontSize: 16,
   },
   buttonText: {
-    fontSize: FontSize.size_xl,
+    fontSize: 20,
     fontFamily: FontFamily.montserratExtrabold,
     color: Color.lightText,
   },
   buttonSolid: {
     justifyContent: "center",
-    borderRadius: Border.br_12xl_5,
+    borderRadius: 32,
     backgroundColor: Color.darkText,
-    paddingVertical: Padding.p_xl,
+    paddingVertical: 20,
     alignItems: "center",
     alignSelf: "stretch",
     flexDirection: "row",
@@ -127,7 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: 800,
-    padding: Padding.p_11xl,
+    padding: 30,
   },
 });
 

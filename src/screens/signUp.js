@@ -3,7 +3,7 @@ import { Text, StyleSheet, TextInput, Pressable, TouchableOpacity, View, Image, 
 import { Checkbox } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
+import { FontFamily, Color } from "../GlobalStyles";
 import { Auth } from "aws-amplify";
 import { useRef } from "react";
 
@@ -78,8 +78,8 @@ const SignUpPage = () => {
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
                     onSubmitEditing={() => {
                         emailRef.current.focus();
-                      }}
-                      blurOnSubmit={false}
+                    }}
+                    blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
@@ -93,8 +93,8 @@ const SignUpPage = () => {
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
                     onSubmitEditing={() => {
                         passwordRef.current.focus();
-                      }}
-                      blurOnSubmit={false}
+                    }}
+                    blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
@@ -108,8 +108,8 @@ const SignUpPage = () => {
                     placeholderTextColor="rgba(36, 28, 28, 0.6)"
                     onSubmitEditing={() => {
                         confirmPasswordRef.current.focus();
-                      }}
-                      blurOnSubmit={false}
+                    }}
+                    blurOnSubmit={false}
                 />
                 <TextInput
                     style={[styles.textBox]}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         fontWeight: "800",
     },
     signUpTitle: {
-        fontSize: FontSize.size_19xl,
+        fontSize: 38,
         textAlign: "center",
         height: 60,
         color: Color.lightText,
@@ -205,8 +205,8 @@ const styles = StyleSheet.create({
         backgroundColor: Color.lightButton,
         height: 60,
         marginTop: 16,
-        paddingHorizontal: Padding.p_6xl,
-        borderRadius: Border.br_12xl_5,
+        paddingHorizontal: 25,
+        borderRadius: 32,
         flexDirection: "row",
         alignSelf: "stretch",
         alignItems: "center",
@@ -215,16 +215,16 @@ const styles = StyleSheet.create({
         backgroundColor: Color.orange,
         height: 60,
         marginTop: 16,
-        paddingVertical: Padding.p_base,
+        paddingVertical: 16,
         justifyContent: "center",
-        paddingHorizontal: Padding.p_6xl,
-        borderRadius: Border.br_12xl_5,
+        paddingHorizontal: 25,
+        borderRadius: 32,
         flexDirection: "row",
         alignSelf: "stretch",
         alignItems: "center",
     },
     signUpText: {
-        fontSize: FontSize.size_xl,
+        fontSize: 20,
         fontFamily: FontFamily.montserratExtrabold,
     },
     signUpParent: {
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     },
     tosText: {
         textAlign: "left",
-        fontSize: FontSize.size_base,
+        fontSize: 16,
         fontFamily: FontFamily.montserratLight,
         color: Color.lightButtonText,
     },
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     signUpScreen: {
-        padding: Padding.p_11xl,
+        padding: 30,
         justifyContent: "center",
         flex: 1,
     },
@@ -283,15 +283,15 @@ const styles = StyleSheet.create({
     },
     termsOfServiceContainer: {
         alignSelf: "stretch",
-        fontSize: FontSize.size_base,
+        fontSize: 16,
         color: Color.black,
         textAlign: "left",
     },
     tosModal: {
-        borderRadius: Border.br_12xl_5,
+        borderRadius: 32,
         backgroundColor: Color.lightText,
         width: 360,
-        padding: Padding.p_xl,
+        padding: 20,
         alignItems: "center",
         justifyContent: "center",
         maxWidth: "100%",

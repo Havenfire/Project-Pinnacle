@@ -5,7 +5,6 @@ import {
     View,
     StyleSheet,
     StatusBar,
-    Pressable,
     Image,
     TouchableOpacity,
     TouchableWithoutFeedback,
@@ -18,15 +17,12 @@ import { Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import Camera from "./camera";
 import { Svg, Image as ImageSvg } from "react-native-svg";
-// import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import mapStyle from "../themes/mapStyle.json";
 // import mapStyleDark from "../themes/mapStyleDark.json";
 
-import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
-import { useRoute } from "@react-navigation/native";
+import { FontFamily, Color } from "../GlobalStyles";
 
 import { Storage } from "@aws-amplify/storage";
-
 import { DataStore } from "@aws-amplify/datastore";
 import { Pin } from "../models";
 import { DialogModal } from "../components/DialogModal";
@@ -67,7 +63,6 @@ export default class DefaultMap extends Component {
             theme: mapStyle,
         };
         const route = this.props.route;
-        console.log(route);
 
         this.state.username = route.params.nav_username;
         this.mapRef = React.createRef();
@@ -139,7 +134,6 @@ export default class DefaultMap extends Component {
     async loadAllPins() {
         try {
             this.state.models = await DataStore.query(Pin);
-            console.log(JSON.stringify(this.state.models));
         } catch (error) {
             console.log('Error retrieving pins', error);
         }
@@ -191,7 +185,6 @@ export default class DefaultMap extends Component {
                 break;
             }
         }
-        console.log(pin_ID);
 
         //removed from local list
         const dead_pin = this.state.pins.splice(index, 1)[0];
@@ -284,13 +277,6 @@ export default class DefaultMap extends Component {
         this.setState({ showConfirmPinDialog: false });
     };
 
-    getButtonColor = () => {
-        if (this.state.theme == mapStyle) {
-            return "#1C1C1CCC";
-        } else {
-            return "#F4F4F4CC";
-        }
-    };
 
     calculateDistance = (coordinate1, coordinate2) => {
         const earthRadius = 6378137; // in meters
@@ -335,7 +321,6 @@ export default class DefaultMap extends Component {
             );
             this.deleteDummyPin(this.state.tempPinCoordinate);
         }
-        // console.log(JSON.stringify(this.state.pins));
         this.dismissConfirmPinDialog();
     };
 
@@ -381,9 +366,8 @@ export default class DefaultMap extends Component {
         let r = {
             latitude: this.state.location.coords.latitude,
             longitude: this.state.location.coords.longitude,
-
-            latitudeDelta: this.state.mapRegion.latitudeDelta,
-            longitudeDelta: this.state.mapRegion.longitudeDelta,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.005,
         };
         this.mapRef.current.animateToRegion(r);
     }
@@ -405,8 +389,8 @@ export default class DefaultMap extends Component {
                     region={{
                         latitude: this.state.location.coords.latitude,
                         longitude: this.state.location.coords.longitude,
-                        latitudeDelta: this.state.location.coords.accuracy * 0.001,
-                        longitudeDelta: this.state.location.coords.accuracy * 0.0005,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.005,
                     }}
                     radius={Dimensions.get("window").width * 0.1}
                     onRegionChange={this._handleMapRegionChange}
@@ -534,8 +518,6 @@ export default class DefaultMap extends Component {
                     <TouchableWithoutFeedback
                         onPress={() => {
                             this.setState({ showPinModal: false });
-                            // console.log(JSON.stringify(this.state.modalPin));
-                            // console.log(this.state.username);
                         }}>
                         <View style={styles.modalOverlay} />
                     </TouchableWithoutFeedback>
@@ -628,11 +610,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     expandedSearchBar: {
-        borderRadius: Border.br_12xl_5,
+        borderRadius: 32,
         backgroundColor: "rgba(12, 12, 12, 0.5)",
         height: 42,
-        paddingHorizontal: Padding.p_smi,
-        paddingVertical: Padding.p_8xs,
+        paddingHorizontal: 13,
+        paddingVertical: 5,
         flexDirection: "row",
         flex: 1,
     },
@@ -662,7 +644,7 @@ const styles = StyleSheet.create({
     homePageOverlay: {
         backgroundColor: "transparent",
         height: 800,
-        padding: Padding.p_base,
+        padding: 16,
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
