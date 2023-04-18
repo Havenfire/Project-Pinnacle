@@ -88,7 +88,7 @@ export default class DefaultMap extends Component {
                 };
             } else {
                 delete this.state.dummyPin;
-                this.state.pins.push({
+                const pin = {
                     coordinate: {
                         latitude: coordinate.latitude,
                         longitude: coordinate.longitude,
@@ -97,7 +97,9 @@ export default class DefaultMap extends Component {
                     description: description ? description : undefined,
                     image: image ? image : undefined,
                     username: this.state.username,
-                });
+                }
+                this.state.pins.push(pin);
+                this.state.my_pins.push(pin);
             }
 
             if (!dummy) {
@@ -113,7 +115,7 @@ export default class DefaultMap extends Component {
                         "username": this.state.username,
                     })
                 );
-
+                this.state.models.push(newPin);
             }
             this.forceUpdate();
         }
@@ -137,6 +139,7 @@ export default class DefaultMap extends Component {
     async loadAllPins() {
         try {
             this.state.models = await DataStore.query(Pin);
+            console.log(JSON.stringify(this.state.models));
         } catch (error) {
             console.log('Error retrieving pins', error);
         }
@@ -157,7 +160,7 @@ export default class DefaultMap extends Component {
                 username: current_pin["username"],
             });
 
-            if(current_pin.username === this.state.username){
+            if (current_pin.username === this.state.username) {
                 this.state.my_pins.push({
                     coordinate: {
                         latitude: current_pin["coordinates"][0],
@@ -174,32 +177,43 @@ export default class DefaultMap extends Component {
         }
     }
 
-    async deletePin(pin_coordinates){
-        var pin_ID = "";
-        var index = 0;
+    async deletePin(pin) {
+        this.state.showPinModal = false;
+        JSON.stringify(pin);
+
+        let pin_ID = "";
+        let index = 0;
 
         for (index = 0; index < this.state.models.length; index++) {
-            if(this.state.models[index].image === pin_coordinates){
+            if (this.state.models[index].coordinates[0] === pin.coordinate.latitude &&
+                this.state.models[index].coordinates[1] === pin.coordinate.longitude) {
                 pin_ID = this.state.models[index].id;
                 break;
             }
         }
+        console.log(pin_ID);
 
         //removed from local list
-        const dead_pin = this.state.pins.splice(index, 1);
-        const filename = `${dead_pin[0].coordinate.latitude}_${dead_pin[0].coordinate.longitude}.jpeg`;
+        const dead_pin = this.state.pins.splice(index, 1)[0];
+        const filename = `${dead_pin.coordinate.latitude}_${dead_pin.coordinate.longitude}.jpeg`;
+
+        // remove from my pins list
+        for (index = 0; index < this.state.my_pins.length; index++) {
+            if (this.state.my_pins[index].coordinate.longitude === dead_pin.coordinate.longitude &&
+                this.state.my_pins[index].coordinate.latitude === dead_pin.coordinate.latitude) {
+                this.state.my_pins.splice(index, 1);
+                break;
+            }
+        }
 
         //remove from storage
         await Storage.remove(filename);
 
         // remove from server
-        const modelToDelete = await DataStore.query(Pin, pin_ID);
-        DataStore.delete(modelToDelete);
+        const pinToDelete = await DataStore.query(Pin, pin_ID);
+        DataStore.delete(pinToDelete);
         this.forceUpdate();
-        
     }
-
-    
 
     componentDidMount() {
         StatusBar.setHidden(true);
@@ -411,29 +425,13 @@ export default class DefaultMap extends Component {
                         : null}
                 </MapView>
 
-                <View style={[styles.titleBar, styles.parentFlexBox, styles.parentFlexBox1]}>
-                    <TextInput // search bar
-                        style={[styles.expandedSearchBar, styles.parentFlexBox]}
-                        placeholder="Search"
-                        keyboardType="default"
-                        placeholderTextColor="rgba(255, 255, 255, 0.8)"
-                    />
-                    <Pressable // hamburger menu button
-                        style={[styles.iconMenu, styles.ml16]}
-                        onPress={() => {
-                            if (this.state.dummyPin) return;
-                            this.props.navigation.navigate("DrawerMenu");
-                        }}>
-                        <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-menu-dark.png")} />
-                    </Pressable>
-                </View>
                 <View style={[styles.navBar, styles.iconHeartParent, styles.parentFlexBox, styles.parentFlexBox1]}>
                     <TouchableOpacity // saved pins heart button
                         style={styles.iconHeart}
                         activeOpacity={0.2}
                         onPress={() => {
                             if (this.state.dummyPin) return;
-                            this.props.navigation.navigate("SavedPinsScreen", {my_pins: this.state.my_pins});
+                            this.props.navigation.navigate("SavedPinsScreen", { my_pins: this.state.my_pins });
                         }}>
                         <Image style={styles.icon} resizeMode="cover" source={require("../assets/-icon-heart-dark.png")} />
                     </TouchableOpacity>
@@ -564,19 +562,19 @@ export default class DefaultMap extends Component {
                                 ) : null}
 
                                 {this.state.modalPin.username == this.state.username ? (
-                                <DialogModal.Footer>
-                                <View style={styles.dialogButtonContainer}>
-                                    <TouchableOpacity
-                                        style={[styles.dialogButton, styles.dialogButtonCancel]}
-                                        onPress={() => {
-                                            this.deletePin(this.state.modalPin.coordinates);
-                                        }}>
-                                        <Text style={styles.dialogButtonText}>Delete</Text>
-                                    </TouchableOpacity>
+                                    <DialogModal.Footer>
+                                        <View style={styles.dialogButtonContainer}>
+                                            <TouchableOpacity
+                                                style={[styles.dialogButton, styles.dialogButtonCancel]}
+                                                onPress={() => {
+                                                    this.deletePin(this.state.modalPin);
+                                                }}>
+                                                <Text style={styles.dialogButtonText}>Delete</Text>
+                                            </TouchableOpacity>
 
-                                </View>
-                            </DialogModal.Footer>
-                            ) : null}
+                                        </View>
+                                    </DialogModal.Footer>
+                                ) : null}
 
                             </View>
                         ) : null}

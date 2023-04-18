@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Pressable, Image, StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PinButtonsScrollable from "../components/PinButtonsScrollable";
+import MyPinsList from "../components/MyPins";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
 import { useRoute } from "@react-navigation/native";
 
@@ -23,7 +23,7 @@ const SavedPinsScreen = () => {
         </Pressable>
         <Text style={styles.savedPinsTitle}>My Pins</Text>
       </View>
-      <PinButtonsScrollable pinList={ route.params.my_pins } />
+      <MyPinsList pinList={route.params.my_pins} />
     </SafeAreaView>
   );
 };
