@@ -390,6 +390,7 @@ export default class DefaultMap extends Component {
                 <MapView
                     style={styles.map}
                     showsUserLocation={true}
+                    toolbarEnabled={false}
                     ref={this.mapRef}
                     provider={PROVIDER_GOOGLE}
                     customMapStyle={this.state.theme}
