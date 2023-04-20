@@ -6,7 +6,7 @@ import { Auth } from 'aws-amplify';
 import { useRef } from "react";
 
 const SignInPage = ({ navigation }) => {
-    const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
+    const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -14,14 +14,17 @@ const SignInPage = ({ navigation }) => {
         setIsLoading(true);
         try {
             const user = await Auth.signIn({
-                username: usernameOrEmail,
+                username: username,
                 password,
             });
             const nav_username = user.username;
             navigation.navigate("DefaultMap", { nav_username });
         } catch (error) {
+            if (error.name === "UserNotConfirmedException") {
+                navigation.navigate("ConfirmationCodeScreen", { user: { user: { username: username } } });
+            }
             Alert.alert(error.message);
-            console.log(error);
+            console.log(JSON.stringify(error));
         }
         setIsLoading(false);
     }
@@ -37,14 +40,16 @@ const SignInPage = ({ navigation }) => {
             <Text style={[styles.welcome]}>Welcome!</Text>
             <TextInput
                 style={[styles.usernameemailForm, styles.signInButtonFlexBox]}
-                placeholder="Username or Email"
-                keyboardType="email-address"
+                placeholder="Username"
                 autoCapitalize="none"
                 placeholderTextColor={Color.lightButtonText}
                 returnKeyType="next"
-                onChangeText={setUsernameOrEmail}
-                value={usernameOrEmail}
+                onChangeText={setUsername}
+                value={username}
                 onSubmitEditing={() => {
+                    if (username.slice(-1) === ' ') {
+                        setUsername(username.slice(0, -1));
+                    }
                     passwordRef.current.focus();
                 }}
                 blurOnSubmit={false}

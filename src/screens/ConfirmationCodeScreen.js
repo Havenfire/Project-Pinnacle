@@ -23,7 +23,7 @@ const ConfirmationCodeScreen = () => {
   async function confirmSignUp() {
     try {
       await Auth.confirmSignUp(username, code);
-      navigation.navigate("DefaultMap", { nav_username });
+      navigation.navigate("SignIn", { nav_username });
     } catch (error) {
       console.log('error confirming sign up', error);
     }
